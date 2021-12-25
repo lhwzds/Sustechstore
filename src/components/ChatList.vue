@@ -4,7 +4,7 @@
         <section class="chatlist" :class="showSelBox>0?'chatlist-bottom-collapse':'chatlist-bottom'">
             <mt-loadmore :top-method="loadTop" top-pull-text="加载更多" top-drop-text="释放加载" @top-status-change="handleTopChange" ref="loadmore">
                 <ul>
-                    <div v-for="item in records" :key="item.index">
+                    <template v-for="item in records">
                         <li class="chat-mine" v-if="item.type==1">
                             <div class="chat-user"><img src="../assets/user.png"></div>
                             <div class="time"><cite><i>{{item.time}}</i>{{item.name}}</cite></div>
@@ -15,7 +15,7 @@
                             <div class="time"><cite>{{item.name}}<i>{{item.time}}</i></cite></div>
                             <div class="chat-text" v-html="replaceFace(item.content)"></div>
                         </li>
-                    </div>
+                    </template>
                 </ul>
             </mt-loadmore>
         </section>
@@ -28,8 +28,8 @@
             <section class="selbox" :class="showSelBox>0?'show':'hide'">
                 <section v-show="showSelBox==1" class="face-box">
                     <mt-swipe :auto="0" :continuous="false">
-                        <mt-swipe-item v-for="n in Math.ceil(EXPS.length/18)" :key="n">
-                            <li v-for="(item, index) in getEXP(n,18)" :key="index">
+                        <mt-swipe-item v-for="n in Math.ceil(EXPS.length/18)">
+                            <li v-for="(item, index) in getEXP(n,18)">
                                 <img :src="'static/emotion/'+item.file" alt="" :data="item.code" v-on:click="content+=item.code">
                             </li>
                         </mt-swipe-item>
@@ -58,13 +58,11 @@ export default {
             topStatus: '',
             //聊天记录
             records: [{
-                index: 1,
                 type: 1,
                 time: util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm:ss'),
                 name: '田荫熙',
                 content: '你好，我是田荫熙'
             }, {
-                index: 2,
                 type: 2,
                 time: util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm:ss'),
                 name: '李怀武',
@@ -114,6 +112,7 @@ export default {
         },
         //发送消息
         sendMsg: function(){
+            var _this=this;
 
             if(this.content==''){
                 Toast('请输入消息');
@@ -158,7 +157,7 @@ export default {
         },
       
         replaceFace:function(con){
-            //var _this=this;
+            var _this=this;
             var exps=this.EXPS;
             for(var i=0;i<exps.length;i++){
                 //con = con.replace(new RegExp(exps[i].code,'g'), '<img src="static/emotion/' + exps[i].file +'"  alt="" />');
@@ -196,7 +195,7 @@ export default {
             }, 1500);
         },
       initWebSocket(){ //初始化weosocket
-        const wsuri = "ws://localhost:8888/websocket";
+        const wsuri = "ws://10.25.110.131:8888/websocket";
         this.websock = new WebSocket(wsuri);
         this.websock.onmessage = this.websocketonmessage;
         this.websock.onopen = this.websocketonopen;
