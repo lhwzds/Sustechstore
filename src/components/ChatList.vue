@@ -1,23 +1,20 @@
 <template>
     <div>
-
         <section class="chatlist" :class="showSelBox>0?'chatlist-bottom-collapse':'chatlist-bottom'">
-            <mt-loadmore :top-method="loadTop" top-pull-text="加载更多" top-drop-text="释放加载" @top-status-change="handleTopChange" ref="loadmore">
-                <ul>
-                    <template v-for="item in records">
-                        <li class="chat-mine" v-if="item.type==1">
-                            <div class="chat-user"><img src="../assets/user.png"></div>
-                            <div class="time"><cite><i>{{item.time}}</i>{{item.name}}</cite></div>
-                            <div class="chat-text" v-html="replaceFace(item.content)"></div>
-                        </li>
-                        <li v-if="item.type==2">
-                            <div class="chat-user"><img src="../assets/default.png"></div>
-                            <div class="time"><cite>{{item.name}}<i>{{item.time}}</i></cite></div>
-                            <div class="chat-text" v-html="replaceFace(item.content)"></div>
-                        </li>
-                    </template>
-                </ul>
-            </mt-loadmore>
+            <ul>
+                <div v-for="item in records" :key="item.time">
+                    <li class="chat-mine" v-if="item.type==1">
+                        <div class="chat-user"><img src="../assets/user.png"></div>
+                        <div class="time"><cite><i>{{item.time}}</i>{{item.name}}</cite></div>
+                        <div class="chat-text" v-html="replaceFace(item.content)"></div>
+                    </li>
+                    <li class="chat-other" v-if="item.type==2">
+                        <div class="chat-user"><img src="../assets/default.png"></div>
+                        <div class="time"><cite>{{item.name}}<i>{{item.time}}</i></cite></div>
+                        <div class="chat-text" v-html="replaceFace(item.content)"></div>
+                    </li>
+                </div>
+            </ul>
         </section>
 
         <section class="foot">
@@ -28,8 +25,8 @@
             <section class="selbox" :class="showSelBox>0?'show':'hide'">
                 <section v-show="showSelBox==1" class="face-box">
                     <mt-swipe :auto="0" :continuous="false">
-                        <mt-swipe-item v-for="n in Math.ceil(EXPS.length/18)">
-                            <li v-for="(item, index) in getEXP(n,18)">
+                        <mt-swipe-item v-for="n in Math.ceil(EXPS.length/18)" :key="n">
+                            <li v-for="(item, index) in getEXP(n,18)" :key="index">
                                 <img :src="'static/emotion/'+item.file" alt="" :data="item.code" v-on:click="content+=item.code">
                             </li>
                         </mt-swipe-item>
@@ -112,7 +109,6 @@ export default {
         },
         //发送消息
         sendMsg: function(){
-            var _this=this;
 
             if(this.content==''){
                 Toast('请输入消息');
@@ -129,19 +125,10 @@ export default {
                 content: this.content
             });
 
-            // setTimeout(function(){
-            //     _this.records.push({
-            //         type: 2,
-            //         time: util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm:ss'),
-            //         name: '李怀武',
-            //         content: '你好！'
-            //     });
-            // },100);
-
             this.content='';
 
             this.scrollToBottom();
-            //this.focusTxtContent();//聚焦输入框
+       
         
         },
       
@@ -157,7 +144,6 @@ export default {
         },
       
         replaceFace:function(con){
-            var _this=this;
             var exps=this.EXPS;
             for(var i=0;i<exps.length;i++){
                 //con = con.replace(new RegExp(exps[i].code,'g'), '<img src="static/emotion/' + exps[i].file +'"  alt="" />');
@@ -195,7 +181,7 @@ export default {
             }, 1500);
         },
       initWebSocket(){ //初始化weosocket
-        const wsuri = "ws://10.25.110.131:8888/websocket";
+        const wsuri = "ws://database.sustechstore.com:8889/websocket";
         this.websock = new WebSocket(wsuri);
         this.websock.onmessage = this.websocketonmessage;
         this.websock.onopen = this.websocketonopen;
@@ -266,10 +252,16 @@ export default {
         padding-left: 0;
         padding-right: 60px;
     }
+
+    .chatlist ul .chat-other {
+        text-align: left;
+        padding-left: 60px;
+        padding-right: 0;
+    }
     
     .chatlist ul li {
         position: relative;
-        /*font-size: 0;*/
+        /* font-size: 0; */
         margin-bottom: 10px;
         padding-left: 60px;
         min-height: 68px;
@@ -279,10 +271,15 @@ export default {
         left: auto;
         right: 3px;
     }
+
+    .chat-other .chat-user {
+        right: auto;
+        left: 3px;
+    }
     
     .chat-user {
         position: absolute;
-        left: 3px;
+        /* left: 3px; */
     }
     
     .chat-text,
@@ -330,11 +327,18 @@ export default {
         background-color: #33DF83;
         color: #fff;
     }
-    
+
+    .chat-other .chat-text {
+        margin-right: 0;
+        text-align: right;
+        background-color: #33DF83;
+        color: #fff;
+    }
+
     .chat-text {
         position: relative;
         line-height: 22px;
-        /*margin-top: 25px;*/
+        margin-top: 25px;
         padding: 10px 15px;
         background-color: #eee;
         border-radius: 3px;
@@ -435,11 +439,11 @@ export default {
     }
     
     .face-box {
-        /* position: absolute; */
-        /* top: 48px; */
-        /* left: 0px; */
-        /* right: 0px; */
-        /* bottom: 0px; */
+        position: absolute;
+        top: 48px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
         padding: 15px 15px 0px 15px;
         overflow: hidden;
         width: 290px;
