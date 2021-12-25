@@ -2,7 +2,7 @@ module.exports = {
     devServer: {
         proxy:{
               '/root':{
-                target:'http://10.25.110.131:23333', //database.sustechstore.com
+                target:'http://database.sustechstore.com:23333', //database.sustechstore.com
                 changeOrigin:true,
                 pathRewrite:{'^/root':''}
               },
