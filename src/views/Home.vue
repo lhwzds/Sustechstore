@@ -43,13 +43,13 @@
           <h3 class="first-info">猜你喜欢</h3>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="center" style="margin-top:0px">
+      <el-row type="flex" justify="center" style="margin-top:0px" align="middle">
         <el-col style="text-align:left">
           <el-card shadow="never" class="content-card"  v-for="item in itemInfo" :key=item.id>
             <img :src="dictionary[item.id]" @click="goGoods(item.id)" class="item-pic" alt="查看商品">
             <p class="item-name" @click="goGoods">{{item.name}}</p>
             <p class="item-price" @click="goGoods">￥{{item.price}}</p>
-            <p class="item-seller" @click="goCenter">发布用户: yjn</p>
+            <p class="item-seller" @click="goCenter">发布用户: {{item.publisher}}</p>
           </el-card>
         </el-col>
       </el-row>
@@ -96,23 +96,45 @@ import FootBar from '../components/FootBar.vue'
             this.bannerHeight = 400 / 1920 * this.screenWidth;
           },
           goPost() {
-            this.$router.push('/postInfo')
+            if(this.$store.state.user.user == null) {
+              this.$confirm("您还未登录，不能发布商品!\n请登录之后再进行操作!", '警告', {
+              confirmButtonText: '确定',
+              type: 'warning'})
+            }
+            else {
+              this.$router.push('/postInfo')
             this.$store.commit('SET_SLO_IND', 2)
+            }
           },
           goTrolley() {
-            this.$router.push('/trolley')
-            this.$store.commit('SET_SLO_IND', 3)
+            if(this.$store.state.user.user == null) {
+              this.$confirm("您还未登录，请先登录再查看购物车!", '警告', {
+              confirmButtonText: '确定',
+              type: 'warning'})
+            }
+            else {
+              this.$router.push('/trolley')
+              this.$store.commit('SET_SLO_IND', 3)
+            }
           },
           goCenter() {
-            this.$router.push('/center')
+            if(this.$store.state.user.user == null) {
+              this.$confirm("您还未登录，请先登录再前往个人中心!", '警告', {
+              confirmButtonText: '确定',
+              type: 'warning'})
+            }
+            else {
+              this.$router.push('/center')
+            }
           },
           goGoods(id) {
+            this.$store.commit('SET_RELOAD', true)
             this.$store.commit('SET_ITEM_ID', id)
             this.$store.commit('SET_SLO_IND', 4)
             this.$router.push('/goods')
           }
         },
-        async created() {
+        async mounted() {
           // 首次加载时,需要调用一次
           this.screenWidth =  window.innerWidth;
           this.setSize();
@@ -127,8 +149,7 @@ import FootBar from '../components/FootBar.vue'
           .catch(function (error) { // 请求失败处理
             console.log(error);
           });
-          let i = 0
-          for(i;i<this.itemInfo.length;i++){
+          for(var i=0;i<this.itemInfo.length;i++){
             if(this.itemInfo[i].fileList.length > 0){
               let pic_name = this.itemInfo[i].fileList[0]
               let item_id = this.itemInfo[i].id
@@ -138,16 +159,14 @@ import FootBar from '../components/FootBar.vue'
               })
             }
           }
-          await this.$store.commit('SET_IMG', this.dictionary)
+          this.$store.commit('SET_IMG', this.dictionary)
           if(this.first){
             this.$router.push('/blank')
-            this.$store.commit('SET_RELOAD')
+            this.$store.commit('SET_RELOAD', false)
           }
-          console.log(this.first)
         },
         updated() {
           this.dictionary = this.$store.state.image_store.images
-          console.log(this.dictionary)
         }
     }
 </script>
@@ -157,7 +176,7 @@ import FootBar from '../components/FootBar.vue'
     background:#fbfbfb;
     width: 300px;
     display: inline-block;
-    margin: 0.3em;
+    margin: 10px;
   }
 
   .el-carousel__item h3 {
@@ -233,6 +252,6 @@ import FootBar from '../components/FootBar.vue'
   .item-pic {
     margin-top:10px;
     cursor:pointer;
-    height: 300px;
+    height: 195px;
   }
 </style>

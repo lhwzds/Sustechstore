@@ -1,6 +1,10 @@
 <template>
   <div id="me">
-    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <div>
+      <HeaderBar></HeaderBar>
+    </div>
+    <div>
+      <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
           <a class="nav-link" @click="logout">退出登录</a>
@@ -44,12 +48,15 @@
         </nav>
       </div>
     </div>
+    </div>
+    
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 import {mapState} from 'vuex'
+import HeaderBar from '../components/HeaderBar.vue'
 export default {
   name: 'Center',
   data () {
@@ -62,6 +69,9 @@ export default {
   },
   computed: {
     ...mapState(['user'])
+  },
+  components: {
+    HeaderBar
   },
   methods: {
     logout () {

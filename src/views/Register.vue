@@ -130,7 +130,7 @@ export default {
       const that = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios.post('/a', {
+          this.$axios.post('/root'+'/register', {
             nick_name: this.RegisterForm.nick_name,
             user_name: this.RegisterForm.user_name,
             password: this.RegisterForm.password,

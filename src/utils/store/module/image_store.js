@@ -1,16 +1,22 @@
 const image_store = {
     state: {
         images: {},
-        reload: true
+        reload: true,
+        item_image: {}
     },
 
     mutations: {
         SET_IMG (state, dict) {
-            state.images = dict
+            for(let key in Object.keys(dict)){
+                state.images[key] = dict[key]
+            }
         },
-        SET_RELOAD (state) {
-            state.reload = false
-        }
+        SET_RELOAD (state, bool) {
+            state.reload = bool
+        },
+        SET_ADD_ITEM (state, dict) {
+            state.item_image = dict
+        },
     }
 }
 

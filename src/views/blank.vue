@@ -5,7 +5,7 @@
 <script>
     export default {
         mounted() {
-            this.$router.push('/')
+            this.$router.go(-1)
         }
     }
 </script>

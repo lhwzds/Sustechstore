@@ -129,7 +129,7 @@ export default {
         console.log(this.user_birthday)
         that.upload.append('birthday', this.user_birthday)
       }
-      that.$axios.post('/uu', that.upload).then(function (res) {
+      that.$axios.post('/root'+'/user/update', that.upload).then(function (res) {
         if (res.status === 200) {
           that.image = that.user_avatar
           that.$store.commit('SET_IMG', that.image)

@@ -9,7 +9,9 @@
     "unit": "karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
+    "start": "node index.js",
+    "server": "nodemon index.js --ignore client"
   },
   "dependencies": {
     "axios": "^0.24.0",

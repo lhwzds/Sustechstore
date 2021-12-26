@@ -85,6 +85,7 @@ export default {
       this.history = this.historySearchList.length == 0 ? false : true;
       this.$store.commit('SET_KEY', this.search)
       this.$store.commit('SET_SLO_IND', 1)
+      this.$store.commit('SET_RELOAD', true)
       this.$router.push('/overview')
       this.reload()
     },

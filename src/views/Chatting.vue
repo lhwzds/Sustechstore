@@ -23,7 +23,7 @@ export default {
 
 <style>
   .chatting-main {
-    /* background-color: #324057; */
+    /*background-color: #324057;*/
     margin: 0px;
     padding: 0px;
     font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
@@ -31,5 +31,8 @@ export default {
     -webkit-font-smoothing: antialiased;*/
     overflow: hidden;
   }
+  
+  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+  
   
 </style>

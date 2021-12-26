@@ -76,7 +76,7 @@
             <el-row type="flex" justify="center" style="margin-top:20px">
 
               <el-col :span="6">
-                <img :src="item.idImg" class="merchandise-img" @click="goGoods"> 
+                <img :src="dictionary[item.id]" class="merchandise-img" @click="goGoods"> 
               </el-col>
 
               <el-col :span="18">
@@ -99,10 +99,10 @@
                     <h3 class="merchandise-price">￥{{item.price}}</h3> 
                   </el-col>
                   <el-col :span="4">
-                    <el-button style="height:100%" plain>加入购物车</el-button>
+                    <el-button style="height:100%" plain @click="addTrolley(item.id)">加入购物车</el-button>
                   </el-col>
                   <el-col :span="4">
-                    <el-button style="height:100%">立即购买</el-button>
+                    <el-button style="height:100%" @click="buyItem(item.id)">立即购买</el-button>
                   </el-col>
                 </el-row>
                  
@@ -112,9 +112,24 @@
           </el-card>
         </el-col>
       </el-row>
-
-      <el-pagination layout="prev, pager, next" :total="500"></el-pagination>
     </el-card>
+
+    <el-dialog title="购买商品" :visible.sync="dialogVisible" width="50%" center>
+      <el-row type="flex">您想要购买的商品为: {{item_buy.name}}</el-row>
+      <el-row type="flex" style="margin-top:20px;">价格: ￥{{item_buy.price}}</el-row>
+      <el-row type="flex" style="margin-top:20px;">交易地点(请先和卖家商量好哦!):</el-row>
+      <el-input maxlength="150" type="textarea" autosize :rows="2" placeholder="请输入地点" v-model="location"></el-input>
+      <el-dialog width="30%" title="购买结果" :visible.sync="innerVisible" append-to-body>
+        <el-row type="flex">{{result_txt}}</el-row>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="innerVisible = false">{{button_text}}</el-button>
+        </span>
+      </el-dialog>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消购买</el-button>
+        <el-button type="primary" @click="sendBuyInfo">确定购买</el-button>
+      </span>
+    </el-dialog>
 
     <FootBar></FootBar>
   </div>
@@ -134,21 +149,103 @@ import axios from 'axios'
                 price_radio: '',
                 size_radio: '',
                 quaility_radio: '',
-                items:[
-                  {id:0, idName:"商品1", idImg:require('../resources/image/merchandise-img/1.jpg'), idPrice: 123, idSeller:'卖家1', idText:'lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
-                  {id:1, idName:"商品2", idImg:require('../resources/image/merchandise-img/2.jpg'), idPrice: 123, idSeller:'卖家2', idText:'lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
-                  {id:2, idName:"商品3", idImg:require('../resources/image/merchandise-img/3.jpg'), idPrice: 123, idSeller:'卖家3', idText:'lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
-                  {id:3, idName:"商品4", idImg:require('../resources/image/merchandise-img/4.jpg'), idPrice: 123, idSeller:'卖家4', idText:'lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
-                  {id:4, idName:"商品5", idImg:require('../resources/image/merchandise-img/5.jpg'), idPrice: 123, idSeller:'卖家5', idText:'lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
-                  {id:5, idName:"商品6", idImg:require('../resources/image/merchandise-img/6.jpg'), idPrice: 123, idSeller:'卖家6', idText:'lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
-                ],
+                items: null,
+                dictionary: {},
+                first: false,
+                money:null,
+                dialogVisible: false,
+                innerVisible: false,
+                location:'',
+                answer: null,
+                result_txt: '',
+                button_text: '',
+                id: '0',
+                item_buy: {'name':'','price':'','id':''},
             };
         },
         methods: {
           goGoods(id) {
+            this.$store.commit('SET_RELOAD', true)
             this.$store.commit('SET_SLO_IND', 4)
             this.$store.commit('SET_ITEM_ID', id)
             this.$router.push('/goods')
+          },
+          async addTrolley(id) {
+            if(this.$store.state.user.user == null) {
+              this.$confirm("您还未登录，请先登录再将商品加入购物车", '警告', {
+              confirmButtonText: '确定',
+              type: 'warning'})
+            }
+            else {
+              let fileList = new FormData()
+              fileList.append('itemId', id)
+              await axios({
+                url:"/root"+'/trolley/add',
+                method: 'post',
+                data: fileList
+              }).then(res => (console.log(res)))
+              this.$confirm('加入购物车成功! 是否前往购物车查看？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'success'
+              }).then(() => {
+                this.$router.push('/trolley')
+              })
+            }
+          },
+          async buyItem(id) {
+            this.id = id
+            if(this.$store.state.user.user == null) {
+              this.$confirm("您还未登录，请先登录再购买商品", '警告', {
+              confirmButtonText: '确定',
+              type: 'warning'})
+            }
+            else {
+              await axios({
+                url:"/root"+'/getmoney',
+                method: 'get'
+              }).then(res => (
+                this.money = parseFloat(res.data) 
+              ))
+              console.log(this.money)
+              for(let i=0;i<this.items.length;i++) {
+                if(this.items[i].id == id) {
+                  this.item_buy = this.items[i]
+                  break
+                }
+              }
+              if(this.money < parseFloat(this.item_buy.price)) {
+                this.$confirm("您的账户余额不足，请充值后再进行购买! ", '警告', {
+                  confirmButtonText: '确定',
+                  type: 'warning'})
+              }
+              else {
+                this.dialogVisible = true
+              }
+            }
+          },
+          async sendBuyInfo() {
+            let fileList =  new FormData()
+            fileList.append('itemID', this.id)
+            fileList.append('location', this.location)
+            await axios({
+                url:"/root"+'/trolley/buy',
+                method: 'post',
+                data: fileList
+            }).then(res => {
+              this.answer = res.data
+              console.log(this.answer)
+              this.innerVisible = true
+              this.dialogVisible = false
+            })
+            if (this.answer == "1"){
+              this.result_txt = "购买成功!一封确认邮件已经发至您的邮箱!"
+              this.button_text = "太棒了!"
+            }
+            else {
+              this.result_txt = "购买失败，好像出了点小问题..."
+              this.button_text = "啊这..."
+            }
           }
         },
         components: {
@@ -158,6 +255,7 @@ import axios from 'axios'
         },
         async mounted() {
           this.search_name = this.$store.state.SearchInfo.Keyword
+          this.first = this.$store.state.image_store.reload
           let formdata = new FormData()
           formdata.append("searchText", this.search_name)
           await axios({
@@ -166,6 +264,27 @@ import axios from 'axios'
             data:formdata,
           }).then(res => (this.items = res.data))
           console.log(this.items)
+          let i = 0
+          for(i;i<this.items.length;i++){
+            if(this.items[i].fileList.length > 0){
+              let pic_name = this.items[i].fileList[0]
+              let item_id = this.items[i].id
+              await this.$axios.get("/root"+"/items/picture/"+pic_name)
+              .then((result) => {
+                this.dictionary[item_id] = result.data
+              })
+            }
+          }
+          await this.$store.commit('SET_IMG', this.dictionary)
+          if(this.first){
+            this.$router.push('/blank')
+            this.$store.commit('SET_RELOAD', false)
+          }
+          console.log(this.first)
+        },
+        updated() {
+          this.dictionary = this.$store.state.image_store.images
+          console.log(this.dictionary)
         }
     }
 </script>

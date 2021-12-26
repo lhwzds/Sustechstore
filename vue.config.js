@@ -1,18 +1,19 @@
 module.exports = {
     devServer: {
         proxy:{
+          
               '/root':{
-                target:'http://localhost:23333',
-                // target:'http://database.sustechstore.com:23333', //database.sustechstore.com
+                // target:'http://database.sustechstore.com:23333', // http://database.sustechstore.com
+                target:'http://localhost:23333', 
                 changeOrigin:true,
                 pathRewrite:{'^/root':''}
               },
               '/proxy':{
-                target:'http://10.25.110.131:23333',
+                // target:'http://database.sustechstore.com:23334',
+                target:'http://localhost:23333', 
                 changeOrigin:true,
                 pathRewrite:{'^/proxy':''}
               },
-            
               '/a':{
                 target:'http://10.25.110.131:23333/register',
                 changeOrigin:true,
@@ -24,12 +25,12 @@ module.exports = {
                 pathRewrite:{'^/tes':''}
               },
               '/b':{
-                target:'/user/basic',
+                target:'http://10.25.110.131:23333/user/basic',
                 changeOrigin:true,
                 pathRewrite:{'^/b':''}
               },
               '/icon':{
-                target:'/user/icon',
+                target:'http://10.25.110.131:23333/user/icon',
                 changeOrigin:true,
                 pathRewrite:{'^/icon':''}
               },
@@ -43,13 +44,7 @@ module.exports = {
                 target:'http://10.25.110.131:23333/user/update',
                 changeOrigin:true,
                 pathRewrite:{'^/uu':''}
-              }
-              ,
-              // '/ch':{
-              //   target:'/chathistory',
-              //   changeOrigin:true,
-              //   pathRewrite:{'^/ch':''}
-              // }
+              },
             }
         }
     }

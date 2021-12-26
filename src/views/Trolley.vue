@@ -18,10 +18,10 @@
           <h3>商品信息</h3>
         </el-col>
         <el-col :span="4">
-          <h3>价格</h3>
+          <h3>卖家</h3>
         </el-col>
         <el-col :span="4">
-          <h3>卖家</h3>
+          <h3>价格</h3>
         </el-col>
         <el-col :span="7">
           <h3>操作</h3>
@@ -29,6 +29,10 @@
       </el-row>
 
       <el-divider></el-divider>
+
+      <el-row type="flex" justify="center" v-if="isEmpty" style="height:600px">
+        <h1 style="line-height:600px;color:darkgrey;">购物车中暂无商品</h1>
+      </el-row>
       
       <el-row type="flex" justify="center">
         <el-col>
@@ -39,24 +43,24 @@
               </el-col>
 
               <el-col :span="4">
-                <img :src="item.idImg" class="trolley-img"> 
+                <img :src="dictionary[item.id]" class="trolley-img" @click="goItem(item.id)"> 
               </el-col>
 
               <el-col :span="4">
-                <p style="text-align:left;">{{item.name}}</p>
+                <p style="text-align:left;cursor: pointer;" @click="goItem(item.id)">{{item.name}}</p>
               </el-col>
 
               <el-col :span="4">
-                <p>{{item.idSeller}}</p>
+                <p>{{item.publisher}}</p>
               </el-col>
 
-              <el-col :span="4">
+              <el-col :span="4" style="color:#FF5809;">
                 <h3>￥{{item.price}}</h3>
               </el-col>
 
               <el-col :span="7">
                 <el-row style="margin-bottom:10px">
-                  <el-button>查看详情</el-button>  
+                  <el-button @click="goItem(item.id)">查看详情</el-button>  
                 </el-row>
                 <el-row>
                   <el-button @click="single_delete(item.id)">删除商品</el-button>
@@ -66,9 +70,27 @@
           </el-card>
         </el-col>
       </el-row>
-
-      <el-pagination layout="prev, pager, next" :total="500"></el-pagination>
     </el-card>
+
+    <el-dialog title="购买商品" :visible.sync="dialogVisible" width="50%" :modal-append-to-body = "false" @close='clear_list' center>
+      <el-row type="flex">您想要购买的商品为: </el-row>
+      <el-row type="flex" v-for="id in buy_list" :key="id" style="margin-top:20px;">
+        {{items[id].name}}
+      </el-row>
+      <el-row type="flex" style="margin-top:20px;">价格: ￥{{sum}}</el-row>
+      <el-row type="flex" style="margin-top:20px;">交易地点(请先和卖家商量好哦!):</el-row>
+      <el-input maxlength="150" type="textarea" autosize :rows="2" placeholder="请输入地点" v-model="location"></el-input>
+      <el-dialog width="30%" title="购买结果" :visible.sync="innerVisible" :modal-append-to-body = "false" @close='clear_list' append-to-body>
+        <el-row type="flex">{{result_txt}}</el-row>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="innerVisible = false">{{button_text}}</el-button>
+        </span>
+      </el-dialog>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible=false">取消购买</el-button>
+        <el-button type="primary" @click="sendBuyInfo">确定购买</el-button>
+      </span>
+    </el-dialog>
 
     <FootBar></FootBar>
     <el-row type="flex" justify="left">
@@ -84,19 +106,16 @@
             <h4>已选商品{{merchan_count}}件</h4>
           </el-col>
           <el-col :span="4">
-            <h4>合计：{{sum}}元</h4>
+            <h4>合计: {{sum}}元</h4>
           </el-col>
           <el-col :span="3.5">
-            <el-button class="count-button" style="width:100px;background:#FF5809" type="primary">
+            <el-button class="count-button" style="width:100px;background:#FF5809" type="primary" @click="buyItems">
               <h3 style="color:white;margin-top:0;margin-bottom:0;">结算</h3>  
             </el-button>
           </el-col>
         </el-row>  
       </el-col>
     </el-row>
-
-
-    
   </div>
 </template>
 
@@ -112,15 +131,19 @@ import axios from 'axios'
                 all_selected: false,
                 merchan_count: 0,
                 sum: 0,
-                selected: [false, false, false, false, false, false],
-                items:[
-                  {id:0, idName:"商品1", idImg:require('../resources/image/merchandise-img/1.jpg'), idPrice: 123, idSeller:'卖家1'},
-                  {id:1, idName:"商品2", idImg:require('../resources/image/merchandise-img/2.jpg'), idPrice: 123, idSeller:'卖家2'},
-                  {id:2, idName:"商品3", idImg:require('../resources/image/merchandise-img/3.jpg'), idPrice: 123, idSeller:'卖家3'},
-                  {id:3, idName:"商品4", idImg:require('../resources/image/merchandise-img/4.jpg'), idPrice: 123, idSeller:'卖家4'},
-                  {id:4, idName:"商品5", idImg:require('../resources/image/merchandise-img/5.jpg'), idPrice: 123, idSeller:'卖家5'},
-                  {id:5, idName:"商品6", idImg:require('../resources/image/merchandise-img/6.jpg'), idPrice: 123, idSeller:'卖家6'},
-                ],
+                selected: {},
+                items:[],
+                isEmpty: true,
+                dictionary: {},
+                money:null,
+                dialogVisible: false,
+                innerVisible: false,
+                location:'',
+                answer: null,
+                result_txt: '',
+                button_text: '',
+                buy_list: new Array(),
+                send_list: new Array(),
             };
         },
         components: {
@@ -129,75 +152,167 @@ import axios from 'axios'
         },
         methods: {
           check_select() {
-            let i = 0
             if(this.all_selected){
-                for(i = 0; i < this.items.length; i++){
-                    this.selected[i] = true
-                } 
+              for(let i = 0; i < this.items.length; i++){
+                this.selected[this.items[i].id] = true  
+              } 
             }
             else{
-                for(i = 0; i < this.items.length; i++){
-                    this.selected[i] = false
-                } 
+              for(let i = 0; i < this.items.length; i++){
+                this.selected[this.items[i].id] = false  
+              } 
             }
             this.count_sum()
           },
           count_sum() {
             let all = 0
             let count = 0
-            let i = 0
-            let items = this.items
-            let selected = this.selected
-            for(i = 0; i < this.items.length; i++){
-                if(selected[i]){
+            for(let i = 0; i < this.items.length; i++){
+                if(this.selected[this.items[i].id]){
                     count++
-                    all += items[i].idPrice
+                    all += parseInt(this.items[i].price) 
                 }
             }
             this.merchan_count = count
             this.sum = all
+            let select_all = true
+            for(let i = 0; i < this.items.length; i++){
+              if(!this.selected[this.items[i].id]){
+                select_all = false
+                break
+              } 
+            }
+            if(select_all){
+              this.all_selected = true
+            }
+            else{
+              this.all_selected = false
+            }
           },
-          single_delete(id) {
-            let i = 0
-            for(i = 0; i < this.items.length; i++){
+          async single_delete(id) {
+            let fileList = new FormData()
+            let list = new Array()
+            list[0] = id
+            fileList.append('itemId', list) 
+            await axios({
+              url: "/root"+"/trolley/remove",
+              method: 'post',
+              data: fileList
+            }).then(res => (console.log(res)))
+            for(let i = 0; i < this.items.length; i++){
                 if(this.items[i].id == id){
-                  let id = this.items[i].id
-                  console.log(id)
-                  axios({
-                    URL: "/proxy"+"trolley/remove",
-                    method: 'post',
-                    data: id
-                  })
                   this.items.splice(i, 1)
-                  this.selected.splice(i, 1)
+                  delete this.selected[id]
+                  break
                 }
             }
           },
           multiple_delete() {
-            let i = 0
+            let fileList = new FormData()
             let list = []
-            for(i = 0; i < this.items.length; i++){
-                if(this.selected[i]==true){
+            for(let i = 0; i < this.items.length; i++){
+                if(this.selected[this.items[i].id]){
                   list.push(this.items[i].id)
-                  this.items.splice(i, 1)
-                  this.selected.splice(i, 1)
-                  i--
+                  delete this.selected[this.items[i].id]
                 }
             }
+            fileList.append('itemId', list)
             axios({
-              URL: "/proxy"+"trolley/remove",
+              url: "/root"+"/trolley/remove",
               method: 'post',
-              data: list
+              data: fileList
+            }).then(res => (console.log(res)))
+            this.$router.push('/blank')
+          },
+          goItem(id) {
+            this.$store.commit('SET_RELOAD', true)
+            this.$store.commit('SET_SLO_IND', 4)
+            this.$store.commit('SET_ITEM_ID', id)
+            this.$router.push('/goods')
+          },
+          async buyItems() {
+            if(this.$store.state.user.user == null) {
+              this.$confirm("您还未登录，请先登录再购买商品", '警告', {
+              confirmButtonText: '确定',
+              type: 'warning'})
+            }
+            else {
+              await axios({
+                url:"/root"+'/getmoney',
+                method: 'get'
+              }).then(res => (
+                this.money = parseFloat(res.data) 
+              ))
+              console.log(this.money)
+              if(this.money < parseFloat(this.sum)) {
+                this.$confirm("您的账户余额不足，请充值后再进行购买! ", '警告', {
+                  confirmButtonText: '确定',
+                  type: 'warning'})
+              }
+              else {
+                for(let i = 0; i < this.items.length; i++){
+                  if(this.selected[this.items[i].id]){
+                    this.buy_list.push(i)
+                    this.send_list.push(this.items[i].id)
+                  }
+                }
+                this.dialogVisible = true
+              }
+            }
+          },
+          async sendBuyInfo() {
+            let fileList =  new FormData()
+            fileList.append('itemID', this.send_list)
+            fileList.append('location', this.location)
+            await axios({
+                url:"/root"+'/trolley/buy',
+                method: 'post',
+                data: fileList
+            }).then(res => {
+              this.answer = res.data
+              console.log(this.answer)
+              this.innerVisible = true
+              this.dialogVisible = false
             })
+            if (this.answer == "1"){
+              this.result_txt = "购买成功!一封确认邮件已经发至您的邮箱!"
+              this.button_text = "太棒了!"
+            }
+            else {
+              this.result_txt = "购买失败，好像出了点小问题..."
+              this.button_text = "啊这..."
+            }
+          },
+          clear_list() {
+            this.buy_list.length = 0
+            this.send_list.length = 0
+            this.dialogVisible = false
           }
         },
         async mounted() {
-          await this.$axios.get("/proxy"+"/trolley")
+          await this.$axios.get("/root"+"/trolley")
           .then((result) => {
             this.items = result.data
           })
+          if(this.items.length > 0){
+            this.isEmpty = false
+          }
+
+          for(let i=0;i<this.items.length;i++){
+            this.selected[this.items[i].id] = false
+          }
+          this.dictionary = this.$store.state.image_store.images
           console.log(this.items)
-          console.log(this.items)
+          console.log(this.selected)
+        },
+        updated() {
+          this.dictionary = this.$store.state.image_store.images
+          if(this.items.length == 0){
+            this.isEmpty = true
+          }
+          else {
+            this.isEmpty = false
+          }
         }
     }
 </script>
@@ -227,6 +342,7 @@ import axios from 'axios'
   .trolley-img {
     height: 100px;
     width: 100px;
+    cursor: pointer;
   }
   .count-bar {
     background:lightgray;

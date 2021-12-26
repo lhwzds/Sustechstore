@@ -109,7 +109,22 @@ export default {
         }
     },
     created() {
-      this.initWebSocket();
+        const that =this;
+        this.mineImg=that.$store.state.user.img;
+        this.mineName=JSON.parse(that.$store.state.user.user).nick_name;
+        this.mineID=JSON.parse(that.$store.state.user.user).id;
+        this.mineToken=that.$store.state.user.token;
+        if (this.mineID==2){
+            this.otherID='1';
+            console.log('mine is 2')
+        }else{
+            this.otherID='2';
+            console.log('mine is 1')
+        }
+        console.log('mineId is '+this.mineID);
+        console.log('otherId is '+this.ohterID);
+        console.log('mineToken is '+JSON.stringify(this.mineToken));
+        this.initWebSocket();
     },
     destroyed() {
       this.websock.close() 
@@ -126,7 +141,7 @@ export default {
                 return;
             }
 
-            var send=this.mineID+',2,'+this.content
+            var send=this.mineID+','+this.ohterID+','+this.content
             this.websocketsend(send);
 
             this.records.push({
@@ -228,23 +243,15 @@ export default {
     async mounted() {
         this.scrollToBottom();
         this.focusTxtContent();
-        const that =this;
-        this.mineImg=that.$store.state.user.img;
-        this.mineName=JSON.parse(that.$store.state.user.user).nick_name;
-        this.mineID=JSON.parse(that.$store.state.user.user).id;
-        this.mineToken=that.$store.state.user.token;
-        if (formdata.get('mineId')==2){
-            this.otherID=1;
-        }else{
-            this.otherID=2;
-        }
-        console.log('mineId is '+this.mineID);
-        console.log('mineToken is '+JSON.stringify(this.mineToken));
 
         let formdata = new FormData()
         formdata.append('mineId', this.mineID)
-        formdata.append('otherId', this.otherID)
- 
+        // formdata.append('otherId', this.otherID)
+        if (formdata.get('mineId')==2){
+            formdata.append('otherId', 1)
+        }else{
+            formdata.append('otherId', 2)
+        }
         await axios({
         url:"/root"+"/chathistory",
         method:'post',

@@ -12,8 +12,8 @@
         <el-row type="flex" justify="center">
             <el-col :span="16">
                 <el-form ref="form" :model="form" label-width='auto' label-position="top">
-                    <el-form-item class="form-item" label="商品名称（至多30字符）" required>
-                        <el-input maxlength="30" v-model="form.name" style="width:75%"></el-input>
+                    <el-form-item class="form-item" label="商品名称（至多40字符）" required>
+                        <el-input maxlength="40" v-model="form.name" style="width:75%"></el-input>
                     </el-form-item>
                 
                     <el-form-item class="form-item" label="商品图片（最多可上传6张）" required :label-width="formLabelWidth" >
@@ -154,7 +154,7 @@ import axios from 'axios'
                         }
                     }).then(res =>{
                         console.log(res)
-                        alert("上传成功！")})
+                        alert("上传成功!")})
                     .catch(function(err){
                         console.log(err)
                         alert("上传失败")
