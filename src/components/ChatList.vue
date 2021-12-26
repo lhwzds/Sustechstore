@@ -9,8 +9,8 @@
                         <div class="chat-text" v-html="replaceFace(item.content)"></div>
                     </li>
                     <li class="chat-other" v-if="item.type==2" style="list-style-type:none;">
-                        <div class="chat-user"><img src="../assets/default.png"></div>
-                        <div class="time"><cite>{{item.name}}<i>{{item.time}}</i></cite></div>
+                        <div class="chat-user"><img :src="otherImg"></div>
+                        <div class="time"><cite>{{otherName}}<i>{{item.time}}</i></cite></div>
                         <div class="chat-text" v-html="replaceFace(item.content)"></div>
                     </li>
                 </div>
@@ -20,7 +20,6 @@
         <section class="foot">
             <mt-field id="txtContent" placeholder="请输入消息" class="con" v-model="content"></mt-field>
             <span class="btn-face" v-on:click="showSelBox=showSelBox==1?0:1"><i class="fa fa-smile-o" aria-hidden="true"></i></span>
-            <span class="btn-plus" v-on:click="showSelBox=showSelBox==2?0:2"><i class="fa" aria-hidden="true" :class="showSelBox==2?'fa-minus-circle':'fa-plus-circle'"></i></span>
             <span class="btn btn-send" v-on:click="sendMsg">发送</span>
             <section class="selbox" :class="showSelBox>0?'show':'hide'">
                 <section v-show="showSelBox==1" class="face-box">
@@ -59,6 +58,7 @@ export default {
             mineID:'',
             mineToken:'',
             //对方信息
+            otherImgName:'',
             otherImg: null,
             otherName:'',
             otherID:'',
@@ -67,13 +67,13 @@ export default {
                 id:1,
                 type: 1,
                 time: util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm:ss'),
-                name: '田荫熙',
+                name: this.mineName,
                 content: '你好，我是田荫熙'
             }, {
                 id: 2,
                 type: 2,
                 time: util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm:ss'),
-                name: '李怀武',
+                name: this.otherName,
                 content: '你好，我是李怀武'
             }],
             // 表情
@@ -114,16 +114,14 @@ export default {
         this.mineName=JSON.parse(that.$store.state.user.user).nick_name;
         this.mineID=JSON.parse(that.$store.state.user.user).id;
         this.mineToken=that.$store.state.user.token;
-        if (this.mineID==2){
-            this.otherID='1';
-            console.log('mine is 2')
-        }else{
-            this.otherID='2';
-            console.log('mine is 1')
-        }
+        this.otherImgName = JSON.parse(this.$store.state.image_store.seller_info).avatar
+        this.otherName = JSON.parse(this.$store.state.image_store.seller_info).publisher
+        this.otherId = JSON.parse(this.$store.state.image_store.seller_info).publisherid
+        console.log(this.$store.state.image_store.seller_info)
         console.log('mineId is '+this.mineID);
+        console.log('mineName is '+this.mineName);
         console.log('otherId is '+this.ohterID);
-        console.log('mineToken is '+JSON.stringify(this.mineToken));
+        console.log('otherImgName is '+this.otherImgName)
         this.initWebSocket();
     },
     destroyed() {
@@ -147,7 +145,7 @@ export default {
             this.records.push({
                 type: 1,
                 time: util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm:ss'),
-                name: '田荫熙',
+                name: this.mineName,
                 content: this.content
             });
 
@@ -226,7 +224,7 @@ export default {
         this.records.push({
             type: 2,
             time: util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm:ss'),
-            name: '李怀武',
+            name: this.otherName,
             content: e.data
         });
         // const redata = JSON.parse(e.data);
@@ -241,6 +239,7 @@ export default {
       },
     },
     async mounted() {
+        const that=this;
         this.scrollToBottom();
         this.focusTxtContent();
 
@@ -258,6 +257,14 @@ export default {
         data:formdata
         }).then(res => (this.records = res.data))
         console.log(this.records)
+        
+        await this.$axios.get('/root' + '/items/picture/' + that.otherImgName).then(function (res) {
+        if (res.status === 200) {
+            that.otherImg = res.data}
+        }).catch(function (error) {
+        console.log(error)
+        })
+
     }
 }
 </script>
@@ -330,8 +337,8 @@ export default {
     }
     
     .chat-user img {
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         border-radius: 100%;
     }
     
@@ -348,7 +355,7 @@ export default {
     cite {
         font-style: normal;
         line-height: 24px;
-        font-size: 12px;
+        font-size: 20px;
         white-space: nowrap;
         color: #999;
         text-align: left;
@@ -378,7 +385,7 @@ export default {
     .chat-text {
         position: relative;
         line-height: 22px;
-        margin-top: 25px;
+        margin-top: 10px;
         padding: 10px 15px;
         background-color: #eee;
         border-radius: 3px;

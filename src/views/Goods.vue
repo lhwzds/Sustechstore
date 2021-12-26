@@ -124,12 +124,14 @@ import axios from 'axios';
             this.$router.push('/postInfo')
           },
           goCenter() {
-            this.$store.commit('SET_SELLER_INFO', this.itemInfo)
+            this.$store.commit('SET_SELLER_INFO',  JSON.stringify(this.itemInfo))
             console.log('iteminfo is'+this.itemInfo)
             this.$router.push('/saler')
             console.log(this.$store.state.image_store.seller_info)
           },
           goChatting() {
+            this.$store.commit('SET_SELLER_INFO', JSON.stringify(this.itemInfo))
+            console.log('iteminfo is'+this.itemInfo)
             this.$router.push('/chat')
           },
           async addTrolley(id) {

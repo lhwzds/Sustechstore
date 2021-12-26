@@ -3,7 +3,7 @@ const image_store = {
         images: {},
         reload: true,
         item_image: {},
-        seller_info: []
+        seller_info: window.sessionStorage.getItem('seller_info')
     },
 
     mutations: {
@@ -19,7 +19,8 @@ const image_store = {
             state.item_image = dict
         },
         SET_SELLER_INFO (state, info) {
-            state.seller_info = info
+            // state.seller_info = info
+            window.sessionStorage.setItem('seller_info', info)
         }
     }
 }
