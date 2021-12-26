@@ -135,6 +135,7 @@ import axios from 'axios';
           this.id = this.$store.state.SearchInfo.item_id
           let formdata = new FormData()
           formdata.append('itemID', this.id)
+          
           await axios({
             url:"/root"+"/items/detail",
             method:'post',

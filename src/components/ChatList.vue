@@ -2,13 +2,13 @@
     <div>
         <section class="chatlist" :class="showSelBox>0?'chatlist-bottom-collapse':'chatlist-bottom'">
             <ul>
-                <div v-for="item in records" :key="item.time">
-                    <li class="chat-mine" v-if="item.type==1">
-                        <div class="chat-user"><img src="../assets/user.png"></div>
-                        <div class="time"><cite><i>{{item.time}}</i>{{item.name}}</cite></div>
+                <div v-for="item in records" :key="item.id">
+                    <li class="chat-mine" v-if="item.type==1" style="list-style-type:none;">
+                        <div class="chat-user"><img :src="mineImg"></div>
+                        <div class="time"><cite><i>{{item.time}}</i>{{mineName}}</cite></div>
                         <div class="chat-text" v-html="replaceFace(item.content)"></div>
                     </li>
-                    <li class="chat-other" v-if="item.type==2">
+                    <li class="chat-other" v-if="item.type==2" style="list-style-type:none;">
                         <div class="chat-user"><img src="../assets/default.png"></div>
                         <div class="time"><cite>{{item.name}}<i>{{item.time}}</i></cite></div>
                         <div class="chat-text" v-html="replaceFace(item.content)"></div>
@@ -42,7 +42,7 @@
 <script>
 import util from '../utils/util.js'
 import { Toast } from 'mint-ui';
-
+import axios from 'axios';
 export default {
     name: 'chatlist',
     data() {
@@ -53,13 +53,24 @@ export default {
             selOther: '其他功能',
             content:'',
             topStatus: '',
+            //个人信息
+            mineImg: null,
+            mineName:'',
+            mineID:'',
+            mineToken:'',
+            //对方信息
+            otherImg: null,
+            otherName:'',
+            otherID:'',
             //聊天记录
             records: [{
+                id:1,
                 type: 1,
                 time: util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm:ss'),
                 name: '田荫熙',
                 content: '你好，我是田荫熙'
             }, {
+                id: 2,
                 type: 2,
                 time: util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm:ss'),
                 name: '李怀武',
@@ -115,7 +126,7 @@ export default {
                 return;
             }
 
-            var send='1,2,'+this.content
+            var send=this.mineID+',2,'+this.content
             this.websocketsend(send);
 
             this.records.push({
@@ -126,10 +137,8 @@ export default {
             });
 
             this.content='';
-
             this.scrollToBottom();
-       
-        
+   
         },
       
         focusTxtContent:function(){
@@ -181,7 +190,8 @@ export default {
             }, 1500);
         },
       initWebSocket(){ //初始化weosocket
-        const wsuri = "ws://database.sustechstore.com:8889/websocket";
+        // const wsuri = "ws://database.sustechstore.com:8888/websocket";
+        const wsuri = "ws://localhost:8888/websocket";
         this.websock = new WebSocket(wsuri);
         this.websock.onmessage = this.websocketonmessage;
         this.websock.onopen = this.websocketonopen;
@@ -189,7 +199,7 @@ export default {
         this.websock.onclose = this.websocketclose;
       },
       websocketonopen(){ //连接建立之后执行send方法发送数据
-        let actions = "1";
+        let actions = this.mineID;
         // this.websocketsend(JSON.stringify(actions));
         this.websocketsend(actions);
       },
@@ -215,9 +225,32 @@ export default {
         console.log('断开连接',e);
       },
     },
-    mounted:function(){
+    async mounted() {
         this.scrollToBottom();
         this.focusTxtContent();
+        const that =this;
+        this.mineImg=that.$store.state.user.img;
+        this.mineName=JSON.parse(that.$store.state.user.user).nick_name;
+        this.mineID=JSON.parse(that.$store.state.user.user).id;
+        this.mineToken=that.$store.state.user.token;
+        if (formdata.get('mineId')==2){
+            this.otherID=1;
+        }else{
+            this.otherID=2;
+        }
+        console.log('mineId is '+this.mineID);
+        console.log('mineToken is '+JSON.stringify(this.mineToken));
+
+        let formdata = new FormData()
+        formdata.append('mineId', this.mineID)
+        formdata.append('otherId', this.otherID)
+ 
+        await axios({
+        url:"/root"+"/chathistory",
+        method:'post',
+        data:formdata
+        }).then(res => (this.records = res.data))
+        console.log(this.records)
     }
 }
 </script>
@@ -255,7 +288,7 @@ export default {
 
     .chatlist ul .chat-other {
         text-align: left;
-        padding-left: 60px;
+        padding-left: 30px;
         padding-right: 0;
     }
     
@@ -274,7 +307,7 @@ export default {
 
     .chat-other .chat-user {
         right: auto;
-        left: 3px;
+        left: -25px;
     }
     
     .chat-user {
@@ -282,7 +315,7 @@ export default {
         /* left: 3px; */
     }
     
-    .chat-text,
+    /* .chat-text, */
     .chat-user {
         display: inline-block;
         vertical-align: top;
@@ -331,7 +364,7 @@ export default {
     .chat-other .chat-text {
         margin-right: 0;
         text-align: right;
-        background-color: #33DF83;
+        background-color: #444647;
         color: #fff;
     }
 
@@ -381,6 +414,11 @@ export default {
         left: auto;
         right: -10px;
         border-top-color: #33DF83;
+    }
+    .chat-other .chat-text:after {
+        right: auto;
+        left: -10px;
+        border-top-color: #444647;
     }
     
     .foot {

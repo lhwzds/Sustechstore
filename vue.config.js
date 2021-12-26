@@ -2,7 +2,8 @@ module.exports = {
     devServer: {
         proxy:{
               '/root':{
-                target:'http://database.sustechstore.com:23333', //database.sustechstore.com
+                target:'http://localhost:23333',
+                // target:'http://database.sustechstore.com:23333', //database.sustechstore.com
                 changeOrigin:true,
                 pathRewrite:{'^/root':''}
               },
@@ -23,12 +24,12 @@ module.exports = {
                 pathRewrite:{'^/tes':''}
               },
               '/b':{
-                target:'http://10.25.110.131:23333/user/basic',
+                target:'/user/basic',
                 changeOrigin:true,
                 pathRewrite:{'^/b':''}
               },
               '/icon':{
-                target:'http://10.25.110.131:23333/user/icon',
+                target:'/user/icon',
                 changeOrigin:true,
                 pathRewrite:{'^/icon':''}
               },
@@ -42,7 +43,13 @@ module.exports = {
                 target:'http://10.25.110.131:23333/user/update',
                 changeOrigin:true,
                 pathRewrite:{'^/uu':''}
-              },
+              }
+              ,
+              // '/ch':{
+              //   target:'/chathistory',
+              //   changeOrigin:true,
+              //   pathRewrite:{'^/ch':''}
+              // }
             }
         }
     }

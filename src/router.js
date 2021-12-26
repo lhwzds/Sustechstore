@@ -12,7 +12,7 @@ import changeData from './views/children/changeData'
 import Goods from './views/Goods.vue'
 import Chatting from './views/Chatting.vue'
 import blank from './views/blank.vue'
- 
+
 Vue.use(Router)
 
 const originalPush = Router.prototype.push

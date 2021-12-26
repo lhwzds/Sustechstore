@@ -22,7 +22,6 @@
       <div class="background">
         <div class="title">Welcome to SUSTech Store</div>
       </div>
-
     </div>
   </div>
 </template>
@@ -75,17 +74,18 @@ export default {
               that.$message.error('用户名或密码错误')
             }
           })
-          await this.$axios.get('/b').then(function (res) {
+          await this.$axios.get('root'+'/user/basic').then(function (res) {
             if (res.status === 200) {
               console.log(res.data)
               that.$store.commit('SET_USER', JSON.stringify(res.data))
             }
           })
-          await this.$axios.get('/icon').then(function (res) {
+          await this.$axios.get('root'+'/user/icon').then(function (res) {
             if (res.status === 200) {
               console.log(res.data)
               that.$store.commit('SET_IMG', res.data)
             }
+          }).catch(function (error) {
           })
         } else {
           this.$message.warning('提交错误')
