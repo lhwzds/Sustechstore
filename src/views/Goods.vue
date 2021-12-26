@@ -125,6 +125,7 @@ import axios from 'axios';
           },
           goCenter() {
             this.$store.commit('SET_SELLER_INFO', this.itemInfo)
+            console.log('iteminfo is'+this.itemInfo)
             this.$router.push('/saler')
             console.log(this.$store.state.image_store.seller_info)
           },

@@ -205,8 +205,8 @@ export default {
             }, 1500);
         },
       initWebSocket(){ //初始化weosocket
-        // const wsuri = "ws://database.sustechstore.com:8888/websocket";
-        const wsuri = "ws://localhost:8888/websocket";
+        const wsuri = "ws://database.sustechstore.com:8888/websocket";
+        // const wsuri = "ws://localhost:8888/websocket";
         this.websock = new WebSocket(wsuri);
         this.websock.onmessage = this.websocketonmessage;
         this.websock.onopen = this.websocketonopen;
