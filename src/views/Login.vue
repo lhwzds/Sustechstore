@@ -4,25 +4,33 @@
       <div class="loginbox-in">
         <div class="name">SUSTech Store</div>
         <el-form :model="loginForm" status-icon :rules="rules" ref="loginForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="loginForm.username" auto-complete="off"></el-input>
+          <el-form-item prop="username">
+            <el-input v-model="loginForm.username" auto-complete="off" placeholder="请输入用户名">
+              <i slot="prefix" class="el-input__icon el-icon-s-custom"
+                 style="font-size: 20px"></i>
+            </el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="pass">
-            <el-input type="password" v-model="loginForm.pass" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button  type="primary" size = 'medium' @click="submitForm('loginForm')">提交</el-button>
-            <el-button  size='medium' @click="resetForm('loginForm')">重置</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="medium" @click="Register()">注册</el-button>
+          <el-form-item prop="pass">
+            <el-input type="password" v-model="loginForm.pass" auto-complete="off" placeholder="请输入密码">
+              <i slot="prefix" class="el-input__icon el-icon-edit" style="font-size: 20px"></i>
+            </el-input>
           </el-form-item>
         </el-form>
+        <div class="tips"  style="float:left;">
+          <el-row type="flex" class="dd">
+            <el-col span:10 offset:1>
+              <el-link type="white" @click="repassword()">忘记密码</el-link>
+            </el-col>
+            <el-col span:9 offset:4>
+              <el-link type="white" @click="Register">还没有账号？点击注册</el-link>
+            </el-col>
+          </el-row>
+          <el-row style="margin-left: 30px">
+            <el-button  type="primary" size = 'medium' @click="submitForm('loginForm')">提交</el-button>
+             <el-button  size='medium' @click="resetForm('loginForm')">重置</el-button>
+          </el-row>
+        </div>
       </div>
-      <div class="background">
-        <div class="title">Welcome to SUSTech Store</div>
-      </div>
-
     </div>
   </div>
 </template>
@@ -77,23 +85,23 @@ export default {
           })
           await this.$axios.get('/root'+'/user/basic').then(function (res) {
             if (res.status === 200) {
-              console.log(res.data)
               that.$store.commit('SET_USER', JSON.stringify(res.data))
             }
           })
           await this.$axios.get('/root'+'/user/icon').then(function (res) {
             if (res.status === 200) {
               console.log(res.data)
-              that.$store.commit('SET_IMG', res.data)
+              that.$store.commit('SET_USERIMG', res.data)
             }
-          }).catch(function () {
+            // eslint-disable-next-line handle-callback-err
+          }).catch(function (error) {
+            console.log(error)
           })
         } else {
           this.$message.warning('提交错误')
           return false
         }
-        this.$store.commit('SET_RELOAD', true)
-        await that.$router.go(-1)
+        await that.$router.push('/')
       })
     },
     resetForm (formName) {
@@ -101,6 +109,9 @@ export default {
     },
     Register () {
       this.$router.push('/register')
+    },
+    repassword () {
+      this.$router.push('/retrieve')
     }
   }
 }
@@ -108,9 +119,10 @@ export default {
 
 <style scoped>
 .loginbox{
+  background-image: url('./../assets/b.jpg');
   display:flex;
   position:absolute;
-  width:800px;
+  width:500px;
   height:400px;
   top:45%;
   left:50%;
@@ -118,20 +130,14 @@ export default {
   box-shadow: 0 12px 16px 0  rgba(0,0,0,0.24), 0 17px 50px 0 #4E655D;
 }
 .loginbox-in{
-  background-image: url('./../assets/b.jpg');
-  width:250px;
+  margin-left: 10px;
+  width:500px;
+  margin-right: 60px;
 }
-.background{
-  width:570px;
-  background-image:url('./../assets/b.jpg');
-  background-size:560px 450px;
-  font-family:Helvetica Neue,serif;
-}
-.title{
-  margin-top:75px;
-  font-weight:bold;
-  font-size:20px;
-  color:#4E655D;
+.tips{
+  margin-left: 10px;
+  width:400px;
+
 }
 
 .demo-ruleForm{
@@ -140,6 +146,7 @@ export default {
 }
 .name{
   margin-top:40px;
+  margin-left: 40px;
   font-weight:bold;
   font-size:30px;
   font-family: 微软雅黑,serif;
@@ -151,5 +158,8 @@ export default {
   height:100%;
   position:fixed;
   background-size:100% 100%
+}
+.dd {
+  margin-bottom: 20px;
 }
 </style>

@@ -97,7 +97,7 @@ import axios from 'axios';
         {
             return {
                 id:'',  
-                itemInfo:null,
+                itemInfo:{'file':['']},
                 screenWidth :0,
                 dictionary: {},
                 first: false,
@@ -124,7 +124,9 @@ import axios from 'axios';
             this.$router.push('/postInfo')
           },
           goCenter() {
-            this.$router.push('/center')
+            this.$store.commit('SET_SELLER_INFO', this.itemInfo)
+            this.$router.push('/saler')
+            console.log(this.$store.state.image_store.seller_info)
           },
           goChatting() {
             this.$router.push('/chat')
@@ -232,6 +234,7 @@ import axios from 'axios';
             this.setSize();
           }
           await this.getItemInfo()
+          console.log(this.itemInfo)
           await this.getImages()
           this.$store.commit('SET_ADD_ITEM', this.dictionary)
           if(this.first){

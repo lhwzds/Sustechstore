@@ -12,6 +12,10 @@ import changeData from './views/children/changeData'
 import Goods from './views/Goods.vue'
 import Chatting from './views/Chatting.vue'
 import blank from './views/blank.vue'
+import changePassword from './views/children/changePassword'
+import transactions from './views/children/transactions'
+import retrieve from './components/retrieve'
+import saler from './components/saler'
  
 Vue.use(Router)
 
@@ -60,7 +64,13 @@ export default new Router({
       children: [
         {path: 'information', component: information},
         {path: '/center', redirect: '/center/information'},
-        {path: 'changeData', component: changeData}
+        {path: 'changeData', component: changeData},
+        {path: 'changePassword', component: changePassword},
+        {path: 'transactions',
+          component: transactions,
+          meta: {
+            keepAlive: true
+          }}
       ]
     },
     {
@@ -77,6 +87,16 @@ export default new Router({
       path: '/blank',
       name: '',
       component: blank
+    },
+    {
+      path: '/retrieve',
+      name: 'retrieve',
+      component: retrieve
+    },
+    {
+      path: '/saler',
+      name: 'saler',
+      component: saler
     }
   ]
 })

@@ -234,7 +234,6 @@ import axios from 'axios'
                 data: fileList
             }).then(res => {
               this.answer = res.data
-              console.log(this.answer)
               this.innerVisible = true
               this.dialogVisible = false
             })
@@ -263,7 +262,6 @@ import axios from 'axios'
             method:'post',
             data:formdata,
           }).then(res => (this.items = res.data))
-          console.log(this.items)
           let i = 0
           for(i;i<this.items.length;i++){
             if(this.items[i].fileList.length > 0){
@@ -280,11 +278,9 @@ import axios from 'axios'
             this.$router.push('/blank')
             this.$store.commit('SET_RELOAD', false)
           }
-          console.log(this.first)
         },
         updated() {
           this.dictionary = this.$store.state.image_store.images
-          console.log(this.dictionary)
         }
     }
 </script>

@@ -2,7 +2,8 @@ const image_store = {
     state: {
         images: {},
         reload: true,
-        item_image: {}
+        item_image: {},
+        seller_info: []
     },
 
     mutations: {
@@ -17,6 +18,9 @@ const image_store = {
         SET_ADD_ITEM (state, dict) {
             state.item_image = dict
         },
+        SET_SELLER_INFO (state, info) {
+            state.seller_info = info
+        }
     }
 }
 

@@ -144,6 +144,7 @@ import axios from 'axios'
                 button_text: '',
                 buy_list: new Array(),
                 send_list: new Array(),
+                first: false
             };
         },
         components: {
@@ -290,6 +291,7 @@ import axios from 'axios'
           }
         },
         async mounted() {
+          this.first = this.$store.state.image_store.reload
           await this.$axios.get("/root"+"/trolley")
           .then((result) => {
             this.items = result.data
@@ -302,6 +304,10 @@ import axios from 'axios'
             this.selected[this.items[i].id] = false
           }
           this.dictionary = this.$store.state.image_store.images
+          if(this.first){
+            this.$router.push('/blank')
+            this.$store.commit('SET_RELOAD', false)
+          }
           console.log(this.items)
           console.log(this.selected)
         },

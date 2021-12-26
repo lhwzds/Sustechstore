@@ -1,35 +1,35 @@
 <template>
   <div class="user-detail">
-    <div class="user-detail-top">基本信息</div>
+    <div class="user-detail-top" style="font-size:25px">基本信息</div>
     <div class="user-detail-group">
       <div class="user-item">
-        <span>头像</span>
+        <span style="font-size:25px">头像</span>
         <span>
-          <a class="avatar-brand">
-              <img v-if="image" width="50px" height="50px" :src="image">
-              <img v-else src="../../assets/logo.png">
-          </a>
+          <div class="avatar-brand">
+              <img v-if="image" :src="image" style="height:65px;width:65px;">
+              <img v-else src="src\assets\logo.png" style="height:65px;width:65px;">
+          </div>
         </span>
       </div>
       <div class="user-item" >
-        <span>手机</span>
-        <span>{{JSON.parse(this.$store.state.user.user).telephone || '暂无'}} </span>
+        <span style="font-size:25px">手机</span>
+        <span style="font-size:25px">{{JSON.parse(this.$store.state.user.user).telephone || '暂无'}}</span>
       </div>
       <div class="user-item">
-        <span>邮箱</span>
-        <span>{{ JSON.parse(this.$store.state.user.user).email || '暂无'}}</span>
+        <span style="font-size:25px">邮箱</span>
+        <span style="font-size:25px">{{ JSON.parse(this.$store.state.user.user).email || '暂无'}}</span>
       </div>
       <div class="user-item">
-        <span>昵称</span>
-        <span>{{ JSON.parse(this.$store.state.user.user).nick_name || '暂无' }}</span>
+        <span style="font-size:25px">昵称</span>
+        <span style="font-size:25px">{{ nick_name || '暂无' }}</span>
       </div>
       <div class="user-item">
-        <span>性别</span>
-        <span>{{ JSON.parse(this.$store.state.user.user).gender||'暂无' }}</span>
+        <span style="font-size:25px">性别</span>
+        <span style="font-size:25px">{{ JSON.parse(this.$store.state.user.user).gender||'暂无' }}</span>
       </div>
       <div class="user-item">
-        <span>生日</span>
-        <span>{{JSON.parse(this.$store.state.user.user).birthday || '暂无' }}</span>
+        <span style="font-size:25px">生日</span>
+        <span style="font-size:25px">{{JSON.parse(this.$store.state.user.user).birthday || '暂无' }}</span>
       </div>
     </div>
   </div>
@@ -41,11 +41,18 @@ import {mapState} from 'vuex'
 export default {
   data () {
     return {
+      nick_name: '',
       image: ''
     }
   },
   created () {
     this.image = this.user.img || ''
+    if (JSON.parse(this.$store.state.user.user).nick_name === '用户未设昵称') {
+      this.nick_name = ''
+    } else {
+      this.nick_name = JSON.parse(this.$store.state.user.user).nick_name
+    }
+    console.log(this.image)
   },
   computed: {
     ...mapState(['user'])
@@ -67,24 +74,17 @@ export default {
   font-weight: bold
 }
 .user-detail-group .user-item{
-  height: 50px;
+  height: 75px;
   padding: 0 10px;
   background-color: #fff;
   border-bottom: 1px solid #e0e0e0;
   display: flex;
   justify-content: space-between;
-  align-items: center
+  align-items: center;
+  font-size:50px;
 }
 .avatar-brand{
   position: relative;
-  width: 100px;
-  height: 100px;
-}
-.avatar-brand /deep/ .el-upload.el-upload--text {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  cursor: pointer;
-  overflow: hidden;
+  border-radius: 50px;
 }
 </style>

@@ -35,8 +35,14 @@
                         </el-dialog>
                     </el-form-item>
 
-                    <el-form-item class="form-item" label="商品数量" required>
-                        <el-input v-model="form.quantity" style="width:75%"></el-input>
+                    <el-form-item class="form-item" label="商品标签" required>
+                        <el-tag :key="tag" style="margin-right:10px" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)">
+                            {{tag}}
+                        </el-tag> 
+                        <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
+                         @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
+                        </el-input>
+                        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加标签</el-button>
                     </el-form-item>
 
                     <el-form-item class="form-item" label="商品价格" required>
@@ -70,7 +76,6 @@ import axios from 'axios'
             return {
                 form: {
                     name: '',
-                    quantity: '',
                     text: '',
                     price: '',
                 },
@@ -79,6 +84,9 @@ import axios from 'axios'
                 formLabelWidth: '80px',
                 limitNum: 6,
                 upFile: new FormData(),
+                dynamicTags: [],
+                inputVisible: false,
+                inputValue: ''
             };
         },
         components: {
@@ -117,18 +125,8 @@ import axios from 'axios'
                     return false
                 }
                 else{
-                    if (!(/(^[1-9]\d*$)/.test(this.form.price))){
-                        alert('商品价格请输入正整数')
-                        return false
-                    }
-                }
-                if (this.form.quantity == '' || this.form.quantity == null){
-                    alert('商品数量不能为空')
-                    return false
-                }
-                else{
-                    if (!(/(^[1-9]\d*$)/.test(this.form.quantity))){
-                        alert('商品数量请输入正整数')
+                    if (!(/^[0-9]+(\.\d+)?$/.test(this.form.price))){
+                        alert('商品价格请输入正数')
                         return false
                     }
                 }
@@ -141,7 +139,7 @@ import axios from 'axios'
                 if (this.checkUpload() == true) {
                     let fileList = this.upFile
                     fileList.append('merchandiseName', this.form.name)
-                    fileList.append('merchandiseQuantity', this.form.quantity)
+                    fileList.append('merchandiseTags', this.dynamicTags)
                     fileList.append('merchandisePrice', this.form.price)
                     fileList.append('merchandiseText', this.form.text)
                     this.$refs.elUpload.submit() 
@@ -154,14 +152,37 @@ import axios from 'axios'
                         }
                     }).then(res =>{
                         console.log(res)
-                        alert("上传成功!")})
+                        this.$confirm("上传成功!", '提示', {
+                            confirmButtonText: '确定',
+                            type: 'success'})
+                        .then(this.$router.push('/'))
+                        })
                     .catch(function(err){
                         console.log(err)
                         alert("上传失败")
                     })
                     this.upFile = new FormData()
+                    
                 }
             },
+
+            handleClose(tag) {
+                this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+            },
+
+            showInput() {
+                this.inputVisible = true;
+                this.$nextTick(_ => {this.$refs.saveTagInput.$refs.input.focus();console.log(_)});
+            },
+
+            handleInputConfirm() {
+                let inputValue = this.inputValue;
+                if (inputValue) {
+                    this.dynamicTags.push(inputValue);
+                }
+                this.inputVisible = false;
+                this.inputValue = '';
+            }
         },
         mounted() {
           // 首次加载时,需要调用一次
@@ -190,6 +211,19 @@ import axios from 'axios'
     }
     .form-item {
         text-align: left;
+    }
+    el-tag + .el-tag {
+        margin-left: 10px;
+    }
+    .button-new-tag {
+        height: 32px;
+        line-height: 30px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .input-new-tag {
+        width: 90px;
+        vertical-align: bottom;
     }
     
 </style>

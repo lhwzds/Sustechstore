@@ -1,64 +1,57 @@
 <template>
   <div id="me">
-    <div>
-      <HeaderBar></HeaderBar>
-    </div>
-    <div>
-      <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-          <a class="nav-link" @click="logout">退出登录</a>
-        </li>
-      </ul>
-    </nav>
-
+    <el-backtop></el-backtop>
+    <InfHead></InfHead>
     <div class="container-fluid">
       <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <nav class="sidebar">
           <div class="sidebar-sticky">
-            <a class="navbar-brand">
-              <img v-if="image" width="150px" height="150px" :src="image">
-              <img v-else src="../assets/logo.png">
-            </a>
+            <div class="navbar-brand">
+              <img v-if="image" :src="image" style="height:150px;width:150px;">
+              <img v-else src="src\assets\logo.png" style="height:150px;width:150px;">
+            </div>
             <el-menu
               default-active="1"
-              class="el-menu-vertical-demo">
-              <el-menu-item index="1"  @click="goTo('/center/information')">
+              class="el-menu-vertical-demo"  style="margin-bottom: 10px">
+              <el-menu-item index="1"  @click="goTo('/center/information')" >
                 <i class="el-icon-document-copy"></i>
-                <span slot="title">我的资料</span>
+                <span style="font-size:18px">我的资料</span>
               </el-menu-item>
-              <el-submenu index="2">
+              <el-submenu index="2" style="margin-bottom: 10px">
                 <template slot="title">
                   <i class="el-icon-edit"></i>
-                  <span>编辑信息</span>
+                  <span style="font-size:18px">编辑信息</span>
                 </template>
                 <el-menu-item-group>
                   <el-menu-item index="2-1" @click="goTo('changeData')" >修改基本信息</el-menu-item>
-                  <el-menu-item index="2-2" >修改密码</el-menu-item>
+                  <el-menu-item index="2-2" @click="goTo('changePassword')">修改密码</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-              <el-submenu index="3">
+              <el-submenu index="3"  style="margin-bottom: 10px">
                 <template slot="title">
-                  <i class="el-icon-collection-tag"></i>
-                  <span>我的订单</span>
+                  <i class="el-icon-shopping-cart-2"></i>
+                  <span style="font-size:18px">购买信息</span>
                 </template>
+                  <el-menu-item-group>
+                    <el-menu-item index="3-1" @click="goTo('transactions')" >已发布商品</el-menu-item>
+                    <el-menu-item index="3-2" @click="goTrolley">购物车</el-menu-item>
+                  </el-menu-item-group>
               </el-submenu>
             </el-menu>
           </div>
         </nav>
       </div>
     </div>
-    </div>
-    
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 import {mapState} from 'vuex'
-import HeaderBar from '../components/HeaderBar.vue'
+import InfHead from '../components/InfHead'
 export default {
   name: 'Center',
+  components: {InfHead},
   data () {
     return {
       image: ''
@@ -70,52 +63,22 @@ export default {
   computed: {
     ...mapState(['user'])
   },
-  components: {
-    HeaderBar
-  },
   methods: {
-    logout () {
-      this.$confirm('您确定退出登录吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '退出成功!'
-        })
-        this.$router.replace('/home')
-        this.$store.commit('LOGOUT', this.$store.state.token)
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消退出'
-        })
-      })
-    },
     goTo (path) {
       this.$router.push(path)
+    },
+    goTrolley() {
+      this.$store.commit('SET_RELOAD', true)
+      this.$router.push('/trolley')
     }
   }
 }
 </script>
 
 <style scoped>
-@media (min-width: 768px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-}
-#me {
-  font-size: .875rem;
-}
-
-/*
- * Sidebar
- */
 .sidebar {
   position: fixed;
-  top: 0;
+  top: 70px;
   bottom: 0;
   left: 0;
   z-index: 100; /* Behind the navbar */
@@ -136,20 +99,11 @@ export default {
   font-weight: 500;
   color: #333;
 }
-.sidebar-sticky .navbar-brand {
-  display: block;
-  text-align: center;
-  padding-top: 0.75rem;
-  padding-bottom: 1.25rem;
-  color: #12263f;
-  margin-right: 0;
-  font-size: 1.0625rem;
-  line-height: inherit;
-  white-space: nowrap;
-  background: #f8f9fa;
-}
 .navbar-brand img{
   border-radius: 50%;
+}
+.navbar-brand {
+  margin-bottom: 15px;
 }
 .sidebar .nav-link .feather {
   margin-right: 4px;
@@ -162,4 +116,5 @@ export default {
 .sidebar .nav-link.active .feather {
   color: inherit;
 }
+
 </style>
