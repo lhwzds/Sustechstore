@@ -11,12 +11,13 @@ import information from './views/children/information.vue'
 import changeData from './views/children/changeData'
 import Goods from './views/Goods.vue'
 import Chatting from './views/Chatting.vue'
+import ChattingResponse from './views/ChattingResponse.vue'
 import blank from './views/blank.vue'
 import changePassword from './views/children/changePassword'
 import transactions from './views/children/transactions'
 import retrieve from './components/retrieve'
 import saler from './components/saler'
- 
+
 Vue.use(Router)
 
 const originalPush = Router.prototype.push
@@ -82,6 +83,11 @@ export default new Router({
       path: '/chat',
       name: 'Chatting',
       component: Chatting
+    },
+    {
+      path: '/chatresponse',
+      name: 'ChattingResponse',
+      component: ChattingResponse
     },
     {
       path: '/blank',

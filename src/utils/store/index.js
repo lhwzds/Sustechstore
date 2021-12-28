@@ -7,18 +7,21 @@ import getters from './getters'
 import actions from './actions'
 import SearchInfo from './module/SearchInfo'
 import image_store from './module/image_store'
+import chat from './module/chat'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
     user,
     SearchInfo,
-    image_store
+    image_store,
+    chat
   },
   mutations,
   state,
   getters,
   actions,
+
 })
 
 export default store

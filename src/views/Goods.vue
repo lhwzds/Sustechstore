@@ -32,7 +32,7 @@
               <h3 class="good-attr">相关标签: </h3>
             </el-col>
             <el-col :span="18" style="margin-top:10px;margin-bottom:5px;">
-              <el-tag size="small" class="good-tag" v-for="tag in itemInfo.tag" :key="tag">{{tag}}</el-tag>
+              <el-tag size="small" class="good-tag" v-for="tag in itemInfo.category" :key="tag">{{tag}}</el-tag>
             </el-col>
           </el-row>
 

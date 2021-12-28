@@ -19,6 +19,7 @@
 
         <section class="foot">
             <!-- <mt-field id="txtContent" placeholder="请输入消息" class="con" v-model="content"></mt-field> -->
+            
             <el-col :span="23" >
                 <el-input class="txtContent" v-model="content" placeholder="请输入消息" ></el-input>
             </el-col>
@@ -40,6 +41,7 @@
                 </section>
                 <div v-show="showSelBox==2">{{selOther}}</div>
             </section> -->
+
         </section>
 
     </div>
@@ -50,7 +52,7 @@ import util from '../utils/util.js'
 import { Toast } from 'mint-ui';
 import axios from 'axios';
 export default {
-    name: 'chatlist',
+    name: 'chatlistresponse',
     data() {
         return {
             websock: null,
@@ -89,13 +91,13 @@ export default {
         this.mineName=JSON.parse(that.$store.state.user.user).nick_name;
         this.mineID=JSON.parse(that.$store.state.user.user).id;
         this.mineToken=that.$store.state.user.token;
-        this.otherImgName = JSON.parse(this.$store.state.image_store.seller_info).avatar
-        this.otherName = JSON.parse(this.$store.state.image_store.seller_info).publisher
-        this.otherID = JSON.parse(this.$store.state.image_store.seller_info).publisherid
-        console.log(this.$store.state.image_store.seller_info)
+        this.otherImgName = JSON.parse(this.$store.state.chat.chatter_info).avatar
+        this.otherName = JSON.parse(this.$store.state.chat.chatter_info).nick_name
+        this.otherId = JSON.parse(this.$store.state.chat.chatter_info).id
+        console.log('chatter_info is'+JSON.parse(this.$store.state.chat.chatter_info))
         console.log('mineId is '+this.mineID);
         console.log('mineName is '+this.mineName);
-        console.log('otherId is '+this.otherID);
+        console.log('otherId is '+this.ohterID);
         console.log('otherImgName is '+this.otherImgName)
         this.initWebSocket();
     },
@@ -114,7 +116,7 @@ export default {
                 return;
             }
 
-            var send=this.mineID+','+this.otherID+','+this.content
+            var send=this.mineID+','+this.ohterID+','+this.content
             this.websocketsend(send);
 
             this.records.push({
@@ -210,9 +212,10 @@ export default {
         this.scrollToBottom();
 
         let formdata = new FormData()
+
         formdata.append('mineId', this.mineID)
         formdata.append('otherId', this.otherID)
-
+    
         await axios({
         url:"/root"+"/chathistory",
         method:'post',
