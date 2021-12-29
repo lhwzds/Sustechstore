@@ -19,7 +19,6 @@
 
         <section class="foot">
             <!-- <mt-field id="txtContent" placeholder="请输入消息" class="con" v-model="content"></mt-field> -->
-            
             <el-col :span="23" >
                 <el-input class="txtContent" v-model="content" placeholder="请输入消息" ></el-input>
             </el-col>
@@ -27,8 +26,7 @@
                 <span class="btn btn-send" v-on:click="sendMsg">发送</span>
             </el-col>
             
-            <!-- <span class="btn-face" v-on:click="showSelBox=showSelBox==1?0:1"><i class="fa fa-smile-o" aria-hidden="true"></i></span> -->
-            
+            <!-- <span class="btn-face" v-on:click="showSelBox=showSelBox==1?0:1"><i class="fa fa-smile-o" aria-hidden="true"></i></span> -->        
             <!-- <section class="selbox" :class="showSelBox>0?'show':'hide'">
                 <section v-show="showSelBox==1" class="face-box">
                     <mt-swipe :auto="0" :continuous="false">
@@ -41,7 +39,6 @@
                 </section>
                 <div v-show="showSelBox==2">{{selOther}}</div>
             </section> -->
-
         </section>
 
     </div>
@@ -91,13 +88,15 @@ export default {
         this.mineName=JSON.parse(that.$store.state.user.user).nick_name;
         this.mineID=JSON.parse(that.$store.state.user.user).id;
         this.mineToken=that.$store.state.user.token;
-        this.otherImgName = JSON.parse(this.$store.state.chat.chatter_info).avatar
-        this.otherName = JSON.parse(this.$store.state.chat.chatter_info).nick_name
-        this.otherId = JSON.parse(this.$store.state.chat.chatter_info).id
-        console.log('chatter_info is'+JSON.parse(this.$store.state.chat.chatter_info))
+        // this.otherImgName = JSON.parse(this.$store.state.image_store.seller_info).avatar
+        // this.otherName = JSON.parse(this.$store.state.image_store.seller_info).publisher
+        // this.otherID = JSON.parse(this.$store.state.image_store.seller_info).publisherid
+        this.otherName='test'
+        this.otherImgName='O1CN01l4mpgR2NXE951sUmU_!!112149972.jpg'
+        this.otherID='7'
         console.log('mineId is '+this.mineID);
         console.log('mineName is '+this.mineName);
-        console.log('otherId is '+this.ohterID);
+        console.log('otherId is '+this.otherID);
         console.log('otherImgName is '+this.otherImgName)
         this.initWebSocket();
     },
@@ -116,7 +115,7 @@ export default {
                 return;
             }
 
-            var send=this.mineID+','+this.ohterID+','+this.content
+            var send=this.mineID+','+this.otherID+','+this.content
             this.websocketsend(send);
 
             this.records.push({
@@ -212,10 +211,9 @@ export default {
         this.scrollToBottom();
 
         let formdata = new FormData()
-
         formdata.append('mineId', this.mineID)
         formdata.append('otherId', this.otherID)
-    
+
         await axios({
         url:"/root"+"/chathistory",
         method:'post',

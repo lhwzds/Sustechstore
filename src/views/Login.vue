@@ -90,7 +90,7 @@ export default {
           })
           await this.$axios.get('/root'+'/user/icon').then(function (res) {
             if (res.status === 200) {
-              console.log(res.data)
+              console.log('用户头像'+res.data)
               that.$store.commit('SET_USERIMG', res.data)
             }
             // eslint-disable-next-line handle-callback-err

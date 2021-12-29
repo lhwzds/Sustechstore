@@ -43,6 +43,7 @@
           <h3 class="first-info">猜你喜欢</h3>
         </el-col>
       </el-row>
+
       <el-row type="flex" justify="center" style="margin-top:0px" align="middle">
         <el-col style="text-align:left">
           <el-card shadow="never" class="content-card"  v-for="item in itemInfo" :key=item.id>
@@ -53,6 +54,7 @@
           </el-card>
         </el-col>
       </el-row>
+      
     </el-card>
 
     <FootBar></FootBar>
@@ -144,7 +146,7 @@ import FootBar from '../components/FootBar.vue'
             this.setSize();
           }
           this.first = this.$store.state.image_store.reload
-          await this.$axios.get("/root"+"/items/all")
+          await this.$axios.get("/root"+"/items/allitems")
           .then(response => (this.itemInfo = response.data))
           .catch(function (error) { // 请求失败处理
             console.log(error);

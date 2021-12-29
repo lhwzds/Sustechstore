@@ -26,8 +26,7 @@
                 <span class="btn btn-send" v-on:click="sendMsg">发送</span>
             </el-col>
             
-            <!-- <span class="btn-face" v-on:click="showSelBox=showSelBox==1?0:1"><i class="fa fa-smile-o" aria-hidden="true"></i></span> -->
-            
+            <!-- <span class="btn-face" v-on:click="showSelBox=showSelBox==1?0:1"><i class="fa fa-smile-o" aria-hidden="true"></i></span> -->        
             <!-- <section class="selbox" :class="showSelBox>0?'show':'hide'">
                 <section v-show="showSelBox==1" class="face-box">
                     <mt-swipe :auto="0" :continuous="false">
@@ -92,7 +91,7 @@ export default {
         this.otherImgName = JSON.parse(this.$store.state.image_store.seller_info).avatar
         this.otherName = JSON.parse(this.$store.state.image_store.seller_info).publisher
         this.otherID = JSON.parse(this.$store.state.image_store.seller_info).publisherid
-        console.log(this.$store.state.image_store.seller_info)
+      
         console.log('mineId is '+this.mineID);
         console.log('mineName is '+this.mineName);
         console.log('otherId is '+this.otherID);

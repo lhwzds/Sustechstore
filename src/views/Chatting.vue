@@ -22,6 +22,7 @@ export default {
 </script>
 
 <style>
+
   .chatting-main {
     /*background-color: #324057;*/
     margin: 0px;
@@ -31,8 +32,5 @@ export default {
     -webkit-font-smoothing: antialiased;*/
     overflow: hidden;
   }
-  
-  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-  
   
 </style>
