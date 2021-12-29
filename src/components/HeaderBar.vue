@@ -9,8 +9,8 @@
       </el-col>
       <el-col :span="3">
         <el-popover
-          placement="bottom"
-          width="250"
+          placement="bottom-start"
+          width="500"
           trigger="click"
           >
           <el-table :data="readData">
@@ -19,7 +19,9 @@
                     <img :src="scope.row.avatar"  min-width="100" height="100"/>
                 </template>         
             </el-table-column>
-            <el-table-column width="50" property="id" label="id" >
+            <el-table-column width="100" property="name" label="昵称" >
+            </el-table-column>
+            <el-table-column width="200" property="content" label="最新消息" >
             </el-table-column>
             <el-table-column width="100" property="id" label="与他联系" >
                 <template   slot-scope="scope">            
@@ -59,7 +61,6 @@ import axios from 'axios';
               readData: [],
               inf: [],
               chatInfo:[],
-              id:'',
               mineToken:null
             };
         },
@@ -76,24 +77,26 @@ import axios from 'axios';
               this.$router.push('/center')
             }
           },
-          goChattingResponse(id) {
-            // console.log('id'+id)
+          async goChattingResponse(id) {
             const that=this;
-            this.getChatInfo(id)
-            that.$store.commit('SET_CHAT_INFO', JSON.stringify(this.chatinfo))
-            // console.log(this.chatInfo)
-            // console.log(that.$store.state.chat.chatter_info)
+            let fileList = new FormData()
+            fileList.append('id',id)
+            console.log(id)
+            await axios({
+              url:"/root"+"/user/id",
+              method:'post',
+              data:fileList
+            }).then(res => (this.chatInfo = res.data)) 
+            that.$store.commit('SET_CHAT_INFO', JSON.stringify(this.chatInfo))
             this.$router.push('/chatresponse')
           },
           async getChatRead() {
             const that=this;
             this.mineToken=that.$store.state.user.token;          
-            this.id = JSON.parse(that.$store.state.user.user).id;
+            this.mineId = JSON.parse(that.$store.state.user.user).id;
             if(this.mineToken !== null){
-              // console.log(this.mineToken)
-              // console.log(this.id)
               let fileList = new FormData()
-              fileList.append('mineId', this.id)
+              fileList.append('mineId', this.mineId)
               await axios({
                 url:"/root"+"/chatread",
                 method:'post',
@@ -102,32 +105,12 @@ import axios from 'axios';
               // console.log(this.readData)
             }
           }, 
-          async getChatInfo(id) {
-            let fileList = new FormData()
-            fileList.append('id',id.toString())
-            await axios({
-              url:"/root"+"/user/id",
-              method:'post',
-              data:fileList
-            }).then(res => (this.chatInfo = res.data,
-            console.log('res'+this.chatInfo))
-            )   
-            console.log('getChatInfoqq'+this.chatInfo.qq)
-          }, 
-          async getChatNew(id) {
-            let fileList = new FormData()
-            fileList.append('id',id)
-            await axios({
-              url:"/root"+"/user/id",
-              method:'post',
-              data:fileList
-            }).then(res => (this.chatInfo = res.data))
-          },
         },
         computed: {
           ...mapState(['user'])
         },
         async created() {
+
           await this.getChatRead()
           const that = this
           for (let i = 0; i < that.readData.length; i++) {
@@ -144,6 +127,23 @@ import axios from 'axios';
                   that.readData[i].avatar = '../assets/logo.png'
             }
           }
+
+          for (let i = 0; i < that.readData.length; i++) {
+            console.log(i)
+            let fileList =  new FormData()
+            fileList.append('mineId', this.mineId)
+            fileList.append('otherId', this.readData[i].id)
+            await axios({
+                url:"/root"+'/chatnew',
+                method: 'post',
+                data: fileList
+            }).then(res => {
+              this.readData[i].content = res.data.content
+              console.log(this.readData[i].content)
+            })
+
+          }
+
         },
         mounted() {
           this.slogan_index = this.$store.state.SearchInfo.slogan_index

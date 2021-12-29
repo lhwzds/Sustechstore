@@ -111,7 +111,7 @@ import axios from 'axios'
                 button_text: '',
             };
         },
-        
+
         components: {
           HeaderBar,
           FootBar

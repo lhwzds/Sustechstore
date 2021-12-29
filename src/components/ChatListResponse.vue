@@ -39,6 +39,7 @@
                 </section>
                 <div v-show="showSelBox==2">{{selOther}}</div>
             </section> -->
+
         </section>
 
     </div>
@@ -88,9 +89,9 @@ export default {
         this.mineName=JSON.parse(that.$store.state.user.user).nick_name;
         this.mineID=JSON.parse(that.$store.state.user.user).id;
         this.mineToken=that.$store.state.user.token;
-        // this.otherImgName = JSON.parse(this.$store.state.image_store.seller_info).avatar
-        // this.otherName = JSON.parse(this.$store.state.image_store.seller_info).publisher
-        // this.otherID = JSON.parse(this.$store.state.image_store.seller_info).publisherid
+        // this.otherImgName = that.$store.state.chat.chat_info.avatar
+        // this.otherName = that.$store.state.chat.chat_info.nick_name
+        // this.otherID = that.$store.state.chat.chat_info.id
         this.otherName='test'
         this.otherImgName='O1CN01l4mpgR2NXE951sUmU_!!112149972.jpg'
         this.otherID='7'
@@ -171,8 +172,9 @@ export default {
             }, 1500);
         },
       initWebSocket(){ //初始化weosocket
-        // const wsuri = "ws://database.sustechstore.com:8888/websocket";
-        const wsuri = "ws://localhost:8888/websocket";
+        const wsuri = "ws://106.52.122.142:8888/websocket";
+        // const wsuri = "ws://10.26.115.152:8888/websocket";
+        // const wsuri = "ws://localhost:8888/websocket";
         this.websock = new WebSocket(wsuri);
         this.websock.onmessage = this.websocketonmessage;
         this.websock.onopen = this.websocketonopen;

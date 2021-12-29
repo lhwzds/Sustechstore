@@ -3,7 +3,7 @@ module.exports = {
         proxy:{
               '/root':{
                 // target:'http://10.15.223.52:23333', // http://database.sustechstore.com’
-                target:'http://localhost:23333',
+                target:'http://106.52.122.142:23333',
                 changeOrigin:true,
                 pathRewrite:{'^/root':''}
               },

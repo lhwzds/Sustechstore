@@ -170,8 +170,9 @@ export default {
             }, 1500);
         },
       initWebSocket(){ //初始化weosocket
-        // const wsuri = "ws://database.sustechstore.com:8888/websocket";
-        const wsuri = "ws://localhost:8888/websocket";
+        const wsuri = "ws://106.52.122.142:8888/websocket";
+        // const wsuri = "ws://10.26.115.152:8888/websocket";
+        // const wsuri = "ws://localhost:8888/websocket";
         this.websock = new WebSocket(wsuri);
         this.websock.onmessage = this.websocketonmessage;
         this.websock.onopen = this.websocketonopen;
@@ -198,7 +199,21 @@ export default {
         // console.log('receive'+redata)
       },
       websocketsend(Data){//数据发送
-        this.websock.send(Data);
+        if (this.websock.readyState === this.websock.OPEN) {
+                this.websock.send(Data);
+        }
+        else if (this.websock.readyState === this.websock.CONNECTING) {
+            let that = this;//保存当前对象this
+            setTimeout(function () {
+                that.websock.send(Data);
+            }, 300);
+        }
+        else {
+            let that = this;
+            setTimeout(function () {
+                that.websock.send(Data);
+            }, 500);
+        }
         console.log('send'+Data)
       },
       websocketclose(e){  //关闭
