@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-row  class="row-header" type="flex" justify="center" >
-      <el-col :span="3" :offset="2">
+      <el-col :span="3" :offset="1">
         <el-button type="primary" icon="el-icon-s-home" class="header-button" id="header-button-1" @click="backHome"></el-button>
       </el-col>
       <el-col :span="10" :offset="2">
         <h2 class='header-h2'>{{ slogan }}</h2>
       </el-col>
-      <el-col :span="3" :offset="1">
+      <el-col :span="3">
         <el-popover
           placement="bottom"
           width="250"
@@ -19,7 +19,7 @@
                     <img :src="scope.row.avatar"  min-width="100" height="100"/>
                 </template>         
             </el-table-column>
-            <el-table-column width="50" property="id" label="昵称" >
+            <el-table-column width="50" property="id" label="id" >
             </el-table-column>
             <el-table-column width="100" property="id" label="与他联系" >
                 <template   slot-scope="scope">            
@@ -30,8 +30,8 @@
           <el-button slot="reference" type="primary" class="header-button" id="header-button-3" icon="el-icon-message"></el-button>
         </el-popover>
       </el-col>
-      <el-col :span="3" :offset="1">
-        <el-button type="primary" class="header-button " id="header-button-2" @click="goLog">{{btn_text}}</el-button>
+      <el-col :span="5">
+        <el-button type="primary" class="header-button" id="header-button-2" @click="goLog">{{btn_text}}</el-button>
       </el-col>
     </el-row>
   </div>
@@ -48,16 +48,19 @@ import axios from 'axios';
                         'Did You Find What You Want?',
                         'Sell Your Own Merchandise!',
                         'Want to Buy Them? Do It Now!',
-                        'That Looks Good, Right?'],
+                        'That Looks Good, Right?',
+                        'Are you satisfied with them?'],
               slogan_index: 0,
               slogan: 'Welcome to Sustech Store!',
               btn_text: '请登录',
-              pop_text:'消息',
               loggin: false,
+              pop_text:'消息',
               mineId:'',
               readData: [],
               inf: [],
-              chatInfo:[]
+              chatInfo:[],
+              id:'',
+              mineToken:null
             };
         },
         methods: {
@@ -138,7 +141,7 @@ import axios from 'axios';
                 }
               })
             } else {
-                  that.readData[i].avatar = './image/logo.png'
+                  that.readData[i].avatar = '../assets/logo.png'
             }
           }
         },
@@ -182,6 +185,6 @@ import axios from 'axios';
     font-size: 30px;
     background:#FF5809;
     border:#FF5809;
-  } 
+  }
 
 </style>

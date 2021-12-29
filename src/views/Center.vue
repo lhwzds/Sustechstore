@@ -12,7 +12,7 @@
             </div>
             <el-menu
               default-active="1"
-              class="el-menu-vertical-demo"  style="margin-bottom: 10px">
+              class="el-menu-vertical-demo"  style="margin-bottom:10px;">
               <el-menu-item index="1"  @click="goTo('/center/information')" >
                 <i class="el-icon-document-copy"></i>
                 <span style="font-size:18px">我的资料</span>
@@ -35,6 +35,7 @@
                   <el-menu-item-group>
                     <el-menu-item index="3-1" @click="goTo('transactions')" >已发布商品</el-menu-item>
                     <el-menu-item index="3-2" @click="goTrolley">购物车</el-menu-item>
+                    <el-menu-item index="3-3" @click="goBought">购买记录</el-menu-item>
                   </el-menu-item-group>
               </el-submenu>
             </el-menu>
@@ -70,6 +71,10 @@ export default {
     goTrolley() {
       this.$store.commit('SET_RELOAD', true)
       this.$router.push('/trolley')
+    },
+    goBought() {
+      this.$store.commit('SET_RELOAD', true)
+      this.$router.push('/bought')
     }
   }
 }
@@ -78,7 +83,7 @@ export default {
 <style scoped>
 .sidebar {
   position: fixed;
-  top: 70px;
+  top: 40px;
   bottom: 0;
   left: 0;
   z-index: 100; /* Behind the navbar */

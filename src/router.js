@@ -17,7 +17,8 @@ import changePassword from './views/children/changePassword'
 import transactions from './views/children/transactions'
 import retrieve from './components/retrieve'
 import saler from './components/saler'
-
+import bought from './views/Bought'
+ 
 Vue.use(Router)
 
 const originalPush = Router.prototype.push
@@ -103,6 +104,11 @@ export default new Router({
       path: '/saler',
       name: 'saler',
       component: saler
+    },
+    {
+      path: '/bought',
+      name: 'bought',
+      component: bought
     }
   ]
 })

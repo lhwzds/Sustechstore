@@ -283,6 +283,7 @@ import axios from 'axios'
               this.result_txt = "购买失败，好像出了点小问题..."
               this.button_text = "啊这..."
             }
+            this.$store.push('/blank')
           },
           clear_list() {
             this.buy_list.length = 0

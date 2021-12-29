@@ -13,62 +13,6 @@
           <h3 id="overview-title">以下为商品: “{{search_name}}”搜索结果:</h3>
         </el-col>
       </el-row>
-
-      <el-row type="flex" justify="center">
-        <el-col>
-          <el-card id="select-card">
-            <el-row type="flex" justify="left" class="select-line">
-                <h5 style="margin-top:10px;margin-bottom:0px">分类筛选: </h5>
-            </el-row>
-
-            <el-row type="flex" justify="center" class="select-line">
-              <el-col :span="4">
-                价格: <br>
-              </el-col>
-              <el-col :span="20">
-                <el-radio v-model="price_radio" label="1">100元以内</el-radio>
-                <el-radio v-model="price_radio" label="2">100~500元</el-radio>
-                <el-radio v-model="price_radio" label="3">500~1000元</el-radio>
-                <el-radio v-model="price_radio" label="4">1000元以上</el-radio>
-              </el-col>
-            </el-row>
-
-            <!-- <el-divider></el-divider>
-
-            <el-row type="flex" justify="center" class="select-line">
-              <el-col :span="4">
-                尺码大小: <br>
-              </el-col>
-              <el-col :span="20">
-                <el-radio v-model="size_radio" label="1">S</el-radio>
-                <el-radio v-model="size_radio" label="2">M</el-radio>
-                <el-radio v-model="size_radio" label="3">L</el-radio>
-                <el-radio v-model="size_radio" label="4">XL</el-radio>
-                <el-radio v-model="size_radio" label="5">XXL</el-radio>
-                <el-radio v-model="size_radio" label="6">XXXL</el-radio>
-                <el-radio v-model="size_radio" label="7">均码</el-radio>
-              </el-col>
-            </el-row>
-
-            <el-divider></el-divider> -->
-
-            <el-row type="flex" justify="center" class="select-line">
-              <!-- <el-col :span="4">
-                物品状态: <br>
-              </el-col>
-              <el-col :span="16">
-                <el-radio v-model="quaility_radio" label="1">一手商品</el-radio>
-                <el-radio v-model="quaility_radio" label="2">崭新出厂</el-radio>
-                <el-radio v-model="quaility_radio" label="3">略有磨损</el-radio>
-                <el-radio v-model="quaility_radio" label="4">差强人意</el-radio>
-              </el-col> -->
-              <el-col :span="4" :offset="20">
-                <el-button>启用筛选</el-button>  
-              </el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-      </el-row>
       
       <el-row type="flex" justify="center">
         <el-col>
@@ -189,6 +133,8 @@ import axios from 'axios'
                 cancelButtonText: '取消',
                 type: 'success'
               }).then(() => {
+                this.$store.commit('SET_SLO_IND', 3)
+                this.$store.commit('SET_RELOAD', true)
                 this.$router.push('/trolley')
               })
             }

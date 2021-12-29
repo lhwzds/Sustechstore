@@ -3,21 +3,54 @@
     <el-backtop></el-backtop>
     <InfHead></InfHead>
     <div class="seller_info" >
-      <el-row id="avatar">
-        <div class="avatar-brand">
-          <div class="block"><el-avatar :size="100" :src="img"></el-avatar></div>
-        </div>
+      <el-row type="flex" justify="center">
+        <el-card class="seller-card">
+        <el-row type="flex" justify="center" class="detail_info">
+        <el-col :span="10">
+          <el-row style="margin-top:32px;">
+            <div class="avatar-brand">
+              <el-avatar :size="100" :src="img"></el-avatar>
+            </div>
+          </el-row>
+          <el-row style="margin-top:15px;">
+            <i class="item_title">{{seller_info.publisher}}</i>
+          </el-row>
+        </el-col>
+        <el-col :span="14" style="text-align:left">
+          <el-row>
+            <span class="item_title">性别: </span>
+            <span>{{seller_info.gender}}</span>
+          </el-row>
+          <el-row style="margin-top:15px;">
+            <span class="item_title">邮箱: </span>
+            <span>{{seller_info.email}}</span>
+          </el-row>
+          <el-row style="margin-top:15px;">
+            <span class="item_title">联系电话: </span>
+            <span>{{seller_info.telephone}}</span>
+          </el-row>
+          <el-row style="margin-top:15px;">
+            <span class="item_title">正在售卖商品的数量: </span>
+            <span>{{items.length}}</span>
+          </el-row>
+          <el-row style="margin-top:15px;">
+            <span class="item_title">信用等级: </span>
+            <span>100</span>
+          </el-row>
+        </el-col>
       </el-row>
-      <el-row>
-        <el-row><i>ddd</i></el-row>
+      </el-card>
       </el-row>
+      
+      
+      
       <div class="show" v-if="showCard">
       <el-row type="flex" justify="center">
         <h3>正在出售的商品</h3>
       </el-row>
       <el-row type="flex" justify="center">
         <el-col :span="24">
-          <el-card class="sell_info" v-for="item in items" :key="item">
+          <el-card class="sell_info" v-for="item in items" :key="item.id">
             <el-row type="flex" justify="center">
               <el-col :span="6">
                 <img :src="item.img" @click="go_goods(item)" class="item_imgs">
@@ -56,7 +89,8 @@ export default {
       items: [],
       inf: [],
       img: null,
-      showCard: false
+      showCard: false,
+      seller_info: {'publisher':'?'}
     }
   },
   methods: {
@@ -73,6 +107,8 @@ export default {
     this.name = this.$store.state.image_store.seller_info.name
     this.birthday = this.$store.state.image_store.seller_info.birthday
     this.id = this.$store.state.image_store.seller_info.id
+    this.seller_info = this.$store.state.image_store.seller_info
+    console.log(this.seller_info)
     await this.$axios.get('/root' + '/items/picture/' + this.image).then(function (res) {
       if (res.status === 200) {
         that.img = res.data}
@@ -144,5 +180,12 @@ export default {
   width:200px;
   height:200px;
   cursor: pointer;
+}
+.detail_info {
+  border-color: black;
+}
+.seller-card {
+  width: 42%;
+  border-radius: 10px;
 }
 </style>

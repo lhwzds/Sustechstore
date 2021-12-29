@@ -18,8 +18,8 @@ const image_store = {
         SET_ADD_ITEM (state, dict) {
             state.item_image = dict
         },
-        SET_SELLER_INFO (state, info) {
-            // state.seller_info = info
+        SET_SELLER_INFO (state,info) {
+            state.seller_info=info
             window.sessionStorage.setItem('seller_info', info)
         }
     }

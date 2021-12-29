@@ -19,8 +19,9 @@ export default {
     }
   },
   created(){
-    this.otherName = JSON.parse(this.$store.state.image_store.seller_info).publisher
-    this.otherImgName = JSON.parse(this.$store.state.image_store.seller_info).avatar
+    const that=this
+    this.otherName = that.$store.state.image_store.seller_info.publisher
+    this.otherImgName = that.$store.state.image_store.seller_info.avatar
   },
   async mounted() {
     const that=this;

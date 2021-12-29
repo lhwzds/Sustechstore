@@ -9,7 +9,7 @@
           <div class="block" style="margin-top:0px">
             <el-carousel indicator-position="outside" trigger="click" height="400px" style="border-radius:0px">
               <el-carousel-item v-for="index in this.itemInfo.file.length" :key="index">
-                <img :src="dictionary[id+'_'+(index-1)]" alt="image">
+                <img :src="dictionary[id+'_'+(index-1)]" alt="image" >
               </el-carousel-item>
             </el-carousel>
           </div>
@@ -27,7 +27,7 @@
             </el-col>
           </el-row>
 
-          <el-row type="flex" style="text-align:left;">
+          <el-row type="flex" style="text-align:left;" v-if="itemInfo.type == '1'">
             <el-col :span="6">
               <h3 class="good-attr">相关标签: </h3>
             </el-col>
@@ -91,7 +91,8 @@
 <script>
 import HeaderBar from '../components/HeaderBar.vue'
 import FootBar from '../components/FootBar.vue'
-import axios from 'axios';
+import axios from 'axios'
+
     export default {
         data() 
         {
@@ -124,14 +125,14 @@ import axios from 'axios';
             this.$router.push('/postInfo')
           },
           goCenter() {
-            this.$store.commit('SET_SELLER_INFO',  JSON.stringify(this.itemInfo))
-            console.log('iteminfo is'+this.itemInfo)
+            this.$store.commit('SET_SELLER_INFO', this.itemInfo)
             this.$router.push('/saler')
-            console.log(this.$store.state.image_store.seller_info)
+            // console.log(this.$store.state.image_store.seller_info)
           },
           goChatting() {
-            this.$store.commit('SET_SELLER_INFO', JSON.stringify(this.itemInfo))
-            console.log('iteminfo is'+this.itemInfo)
+            // console.log('iteminfo is'+this.itemInfo)
+
+            this.$store.commit('SET_SELLER_INFO', this.itemInfo)
             this.$router.push('/chat')
           },
           async addTrolley(id) {
@@ -240,6 +241,7 @@ import axios from 'axios';
           console.log(this.itemInfo)
           await this.getImages()
           this.$store.commit('SET_ADD_ITEM', this.dictionary)
+          
           if(this.first){
             this.$router.push('/blank')
             this.$store.commit('SET_RELOAD', false)

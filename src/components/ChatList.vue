@@ -88,9 +88,10 @@ export default {
         this.mineName=JSON.parse(that.$store.state.user.user).nick_name;
         this.mineID=JSON.parse(that.$store.state.user.user).id;
         this.mineToken=that.$store.state.user.token;
-        this.otherImgName = JSON.parse(this.$store.state.image_store.seller_info).avatar
-        this.otherName = JSON.parse(this.$store.state.image_store.seller_info).publisher
-        this.otherID = JSON.parse(this.$store.state.image_store.seller_info).publisherid
+        console.log(that.$store.state.image_store.seller_info)
+        this.otherImgName = that.$store.state.image_store.seller_info.avatar
+        this.otherName = that.$store.state.image_store.seller_info.publisher
+        this.otherID = that.$store.state.image_store.seller_info.publisherid
       
         console.log('mineId is '+this.mineID);
         console.log('mineName is '+this.mineName);

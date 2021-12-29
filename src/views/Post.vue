@@ -11,12 +11,19 @@
         
         <el-row type="flex" justify="center">
             <el-col :span="16">
-                <el-form ref="form" :model="form" label-width='auto' label-position="top">
+                <el-row style="margin-top:20px;margin-bottom:20px;text-align:left;">
+                    服务类型: 
+                    <el-radio v-model="radio_type" label="1" style="margin-left:20px;">商品</el-radio>
+                    <el-radio v-model="radio_type" label="2">跑腿</el-radio> 
+                    <el-radio v-model="radio_type" label="3">商品求购</el-radio>
+                </el-row>
+                
+                <el-form ref="form" :model="form" label-width='auto' label-position="top" v-if="radio_type=='1'">
                     <el-form-item class="form-item" label="商品名称（至多40字符）" required>
                         <el-input maxlength="40" v-model="form.name" style="width:75%"></el-input>
                     </el-form-item>
                 
-                    <el-form-item class="form-item" label="商品图片（最多可上传6张）" required :label-width="formLabelWidth" >
+                    <el-form-item class="form-item" label="商品图片（最多可上传3张）" required :label-width="formLabelWidth" >
                         <el-upload 
                         ref="elUpload" 
                         action="#" 
@@ -58,6 +65,44 @@
                         <el-button size="small">取消</el-button>
                     </el-form-item>
                 </el-form>
+
+                 <el-form ref="form" :model="form" label-width='auto' label-position="top" v-if="radio_type=='2'">
+                     <el-form-item class="form-item" label="跑腿名称（至多40字符）" required>
+                        <el-input maxlength="40" v-model="form.name" style="width:75%"></el-input>
+                    </el-form-item>
+
+                    <el-form-item class="form-item" label="跑腿价格" required>
+                        <el-input v-model="form.price" style="width:75%"></el-input>
+                    </el-form-item>
+
+                    <el-form-item class="form-item" label="跑腿简介（至多150字符）">
+                        <el-input maxlength="150" type="textarea" autosize :rows="2" placeholder="请输入内容" v-model="form.text"></el-input>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-button size="small" type="primary" @click="uploadFile">立即上传</el-button>
+                        <el-button size="small">取消</el-button>
+                    </el-form-item>
+                </el-form>
+
+                <el-form ref="form" :model="form" label-width='auto' label-position="top" v-if="radio_type=='3'">
+                     <el-form-item class="form-item" label="求购商品名称（至多40字符）" required>
+                        <el-input maxlength="40" v-model="form.name" style="width:75%"></el-input>
+                    </el-form-item>
+
+                    <el-form-item class="form-item" label="预期价格" required>
+                        <el-input v-model="form.price" style="width:75%"></el-input>
+                    </el-form-item>
+
+                    <el-form-item class="form-item" label="相关简介（至多150字符）">
+                        <el-input maxlength="150" type="textarea" autosize :rows="2" placeholder="请输入内容" v-model="form.text"></el-input>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-button size="small" type="primary" @click="uploadFile">立即上传</el-button>
+                        <el-button size="small">取消</el-button>
+                    </el-form-item>
+                </el-form>
             </el-col>
         </el-row>
     </el-card>
@@ -79,10 +124,11 @@ import axios from 'axios'
                     text: '',
                     price: '',
                 },
+                radio_type: "1",
                 dialogImageUrl: '',
                 dialogVisible: false,
                 formLabelWidth: '80px',
-                limitNum: 6,
+                limitNum: 3,
                 upFile: new FormData(),
                 dynamicTags: [],
                 inputVisible: false,
@@ -117,16 +163,16 @@ import axios from 'axios'
 
             checkUpload() {
                 if (this.form.name == '' || this.form.price == null){
-                    alert('商品名称不能为空')
+                    alert('名称不能为空')
                     return false
                 }
                 if (this.form.price == '' || this.form.price == null){
-                    alert('商品价格不能为空')
+                    alert('价格不能为空')
                     return false
                 }
                 else{
                     if (!(/^[0-9]+(\.\d+)?$/.test(this.form.price))){
-                        alert('商品价格请输入正数')
+                        alert('价格请输入正数')
                         return false
                     }
                 }
@@ -138,11 +184,20 @@ import axios from 'axios'
             uploadFile() {
                 if (this.checkUpload() == true) {
                     let fileList = this.upFile
-                    fileList.append('merchandiseName', this.form.name)
-                    fileList.append('merchandiseTags', this.dynamicTags)
+                    fileList.append('merchandiseType', this.radio_type)
                     fileList.append('merchandisePrice', this.form.price)
                     fileList.append('merchandiseText', this.form.text)
-                    this.$refs.elUpload.submit() 
+                    if(this.radio_type == "1"){
+                        fileList.append('merchandiseTags', this.dynamicTags)
+                        fileList.append('merchandiseName', this.form.name)
+                        this.$refs.elUpload.submit() 
+                    }
+                    else if(this.radio_type == '2'){
+                        fileList.append('merchandiseName', '跑腿: '+this.form.name)
+                    }
+                    else{
+                        fileList.append('merchandiseName', '求购: '+this.form.name)
+                    }
                     axios({
                         url:"/root"+"/items/add",
                         method:'post',
