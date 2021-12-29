@@ -11,7 +11,7 @@
             </el-input>
           </el-form-item>
           <el-form-item prop="pass">
-            <el-input type="password" v-model="loginForm.pass" auto-complete="off" placeholder="请输入密码">
+            <el-input type="password" v-model="loginForm.pass" auto-complete="off" placeholder="请输入密码" show-password>
               <i slot="prefix" class="el-input__icon el-icon-edit" style="font-size: 20px"></i>
             </el-input>
           </el-form-item>
@@ -119,7 +119,7 @@ export default {
 
 <style scoped>
 .loginbox{
-  background-image: url('./../assets/b.jpg');
+  background:rgb(247, 187, 123);
   display:flex;
   position:absolute;
   width:500px;

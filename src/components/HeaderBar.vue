@@ -8,6 +8,7 @@
         <h2 class='header-h2'>{{ slogan }}</h2>
       </el-col>
       <el-col :span="3">
+        
         <el-popover
           placement="bottom-start"
           width="500"
@@ -29,8 +30,9 @@
                 </template>  
             </el-table-column>
           </el-table>
-          <el-button slot="reference" type="primary" class="header-button" id="header-button-3" icon="el-icon-message"></el-button>
+            <el-button slot="reference" type="primary" class="header-button" id="header-button-3" icon="el-icon-message"></el-button>        
         </el-popover>
+
       </el-col>
       <el-col :span="5">
         <el-button type="primary" class="header-button" id="header-button-2" @click="goLog">{{btn_text}}</el-button>

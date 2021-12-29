@@ -29,9 +29,9 @@
         </el-col>
         <el-col :span="8">
           <el-card shadow="never" id="user-box">
-            <el-row><el-button class="user-box-button" type="primary" plain style="margin-top:20px" @click="goTrolley">购物车</el-button></el-row>
+            <el-row><el-button class="user-box-button" type="primary" plain style="margin-top:40px" @click="goTrolley">购物车</el-button></el-row>
             <el-row><el-button class="user-box-button" type="primary" plain @click="goBought">购买记录</el-button></el-row>
-            <el-row><el-button class="user-box-button" type="primary" plain>聊天工具</el-button></el-row>
+            <!-- <el-row><el-button class="user-box-button" type="primary" plain>聊天工具</el-button></el-row> -->
             <el-row><el-button class="user-box-button" type="primary" plain @click="goPost">发布商品</el-button></el-row>
             <el-row><el-button class="user-box-button" type="primary" plain @click="goCenter">个人主页</el-button></el-row>
           </el-card>
@@ -52,7 +52,7 @@
             <img :src="dictionary[item.id]" @click="goGoods(item.id)" class="item-pic" alt="查看商品">
             <p class="item-name" @click="goGoods(item.id)">{{item.name}}</p>
             <p class="item-price" @click="goGoods(item.id)">￥{{item.price}}</p>
-            <p class="item-seller" @click="goCenter">发布用户: {{item.publisher}}</p>
+            <p class="item-seller" >发布用户: {{item.publisher}}</p>
           </el-card>
         </el-col>
       </el-row>
@@ -63,7 +63,7 @@
             <img :src="erand_img" @click="goGoods(item.id)" class="item-pic" alt="查看商品">
             <p class="item-name" @click="goGoods(item.id)">{{item.name}}</p>
             <p class="item-price" @click="goGoods(item.id)">￥{{item.price}}</p>
-            <p class="item-seller" @click="goCenter">发布用户: {{item.publisher}}</p>
+            <p class="item-seller" >发布用户: {{item.publisher}}</p>
           </el-card>
         </el-col>
       </el-row>
@@ -74,7 +74,7 @@
             <img :src="need_img" @click="goGoods(item.id)" class="item-pic" alt="查看商品">
             <p class="item-name" @click="goGoods(item.id)">{{item.name}}</p>
             <p class="item-price" @click="goGoods(item.id)">￥{{item.price}}</p>
-            <p class="item-seller" @click="goCenter">发布用户: {{item.publisher}}</p>
+            <p class="item-seller" >发布用户: {{item.publisher}}</p>
           </el-card>
         </el-col>
       </el-row>
@@ -200,13 +200,14 @@ import axios from 'axios'
               this.$router.push('/bought')
             }
           },
-          goCenter() {
+          goCenter(id) {
             if(this.$store.state.user.user == null) {
               this.$confirm("您还未登录，请先登录再前往个人中心!", '警告', {
               confirmButtonText: '确定',
               type: 'warning'})
             }
             else {
+              console.log(id)
               this.$router.push('/center')
             }
           },

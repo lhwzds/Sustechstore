@@ -20,6 +20,14 @@
         <span style="font-size:25px">{{ JSON.parse(this.$store.state.user.user).email || '暂无'}}</span>
       </div>
       <div class="user-item">
+        <span style="font-size:25px">QQ</span>
+        <span style="font-size:25px">{{JSON.parse(this.$store.state.user.user).qq || '暂无' }}</span>
+      </div>
+       <div class="user-item">
+        <span style="font-size:25px">微信</span>
+        <span style="font-size:25px">{{JSON.parse(this.$store.state.user.user).wechat || '暂无' }}</span>
+      </div>
+      <div class="user-item">
         <span style="font-size:25px">昵称</span>
         <span style="font-size:25px">{{ nick_name || '暂无' }}</span>
       </div>

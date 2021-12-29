@@ -18,6 +18,7 @@ import transactions from './views/children/transactions'
 import retrieve from './components/retrieve'
 import saler from './components/saler'
 import bought from './views/Bought'
+import money from './views/children/money'
  
 Vue.use(Router)
 
@@ -72,7 +73,8 @@ export default new Router({
           component: transactions,
           meta: {
             keepAlive: true
-          }}
+          }},
+          {path: 'money', component: money}
       ]
     },
     {

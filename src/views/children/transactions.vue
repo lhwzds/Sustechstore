@@ -1,26 +1,23 @@
 <template>
   <div v-if="showcard">
     <div class="transactions">
-      <el-row type="flex">
-        <el-col :span="4" :offset="2" class="trans_title">商品图片</el-col>
-        <el-col :span="4" :offset="1" class="trans_title">商品名称</el-col>
-        <el-col :span="6" :offset="2" class="trans_title">商品描述</el-col>
-        <el-col :span="3" :offset="2" class="trans_title">商品状态</el-col>
-      </el-row>
-          <el-card class="item-card" shadow="never" v-for="item of Sale_items" :key=item.id>
-            <el-row type="flex" align="middle">
-              <el-col :span="4" >
-                <img :src="item.img" style="height:100px;width:100px;">
+      <el-row>
+        <el-col>
+          <el-card class="item-card" shadow="never" v-for="item of Sale_items" :key=item.name>
+            <el-row type="flex" justify="center" align="middle">
+              <el-col span:1>
+                <img :src="item.img" style="height:100px;width:100px;" @click="goGoods(item.id)">
               </el-col>
-              <el-col :span="6" style="text-align:left;">
+              <el-col span:6 @click="goGoods(item.id)">
                 {{item.name}}
               </el-col>
-              <el-col :span="9" style="text-align:left;">
+              <el-col span:16 :offset=1 @click="goGoods(item.id)">
                 {{item.description}}
               </el-col>
             </el-row>
           </el-card>
-        
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -38,6 +35,12 @@ export default {
   methods: {
     go_path () {
       this.$router.push('/center')
+    },
+    goGoods(id) {
+            this.$store.commit('SET_RELOAD', true)
+            this.$store.commit('SET_ITEM_ID', id)
+            this.$store.commit('SET_SLO_IND', 4)
+            this.$router.push('/goods')
     }
   },
   async created () {
@@ -56,6 +59,7 @@ export default {
             ob.name = that.inf[i].name
             ob.description = that.inf[i].description
             ob.img = res.data
+            ob.id = that.inf[i].id
             that.Sale_items[i] = ob
           }
         })
@@ -84,9 +88,5 @@ export default {
   margin-right: 80px;
   height: 10%;
   border-radius:20px;
-}
-.trans_title {
-  font-size: 20px;
-  font-weight: bold;
 }
 </style>

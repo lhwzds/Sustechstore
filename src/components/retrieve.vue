@@ -1,4 +1,5 @@
 <template>
+<div class="main">
   <div class="retrievePass">
     <el-steps :active="active" finish-status="success">
       <el-step title="check"></el-step>
@@ -6,6 +7,7 @@
       <el-step title="finish"></el-step>
     </el-steps>
     <div class="steps-content">
+     <div class="form-content">
       <el-form v-if="active === 0" :model="emailForm" status-icon :rules="emailRule" ref="emailForm">
         <el-form-item prop="email">
           <el-input v-model="emailForm.email" auto-complete="off" placeholder="请输入邮箱"></el-input>
@@ -23,11 +25,15 @@
         <el-form-item label="确认密码" prop="confirm">
           <el-input type="password" placeholder="请确认新密码" v-model="form.confirm"></el-input>
         </el-form-item>
-        <el-form-item>
+        <div class="button">
           <el-button type="primary" @click="onSubmit('form')">保存</el-button>
           <el-button @click="$refs['form'].resetFields()">重置</el-button>
-        </el-form-item>
+        </div>
       </el-form>
+      <div v-if="active === 2" class="complete">
+        <span>修改完成</span>
+      </div>
+     </div>
     </div>
     <div class="steps-action">
       <el-button v-if="active < 2" type="primary" @click="next">
@@ -45,6 +51,7 @@
       </el-button>
     </div>
   </div>
+</div>
 </template>
 <script>
 export default {
@@ -194,7 +201,7 @@ export default {
   background-color: #fafafa;
   min-height: 200px;
   text-align: center;
-  padding-top: 80px;
+  padding-top: 50px;
 }
 
 .steps-action {
@@ -204,5 +211,16 @@ export default {
   margin-top:100px;
   width: 600px;
   margin-left: 500px;
+}
+.main{
+  background-image: url("./../assets/back.jpg");
+  width:100%;
+  height:100%;
+  position:fixed;
+  background-size:100% 100%
+}
+.form-content{
+  margin-left: 10%;
+  margin-right: 10%;
 }
 </style>

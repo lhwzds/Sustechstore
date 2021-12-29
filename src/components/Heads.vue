@@ -2,8 +2,6 @@
   <section class="top">
     <img class="head" :src="otherImg" />
     <span class="name">{{otherName}}</span>
-    <span class="voice"><i class="fa" aria-hidden="true" :class="vociceOpen?'fa-volume-up':'fa-volume-down'" v-on:click="vociceOpen=vociceOpen?false:true"></i></span>
-    <!--fa fa-volume-off-->
   </section>
 </template>
 
@@ -59,15 +57,15 @@ export default {
   }
   
   .top .name {
+    width: 500px;
     font-size: 18px;
     color: #444;
     margin-left: 10px;
   }
-  
-  .top .voice {
-    width: 30px;
-    height: 50px;
-    float: right;
-    text-align: center;
+
+  .top .home {
+    font-size: 18px;
+    color: #444;
+    margin-right: 100px;
   }
 </style>

@@ -40,6 +40,32 @@
         </el-input>
       </div>
       <div class="user-item">
+        <span>QQ</span>
+        <el-input
+          type="text"
+          placeholder="请输入内容"
+          v-model="user_qq"
+          maxlength="20"
+          show-word-limit
+          clearable
+          style="width:200px"
+        >
+        </el-input>
+      </div>
+      <div class="user-item">
+        <span>微信</span>
+        <el-input
+          type="text"
+          placeholder="请输入内容"
+          v-model="user_wechat"
+          maxlength="20"
+          show-word-limit
+          clearable
+          style="width:200px"
+        >
+        </el-input>
+      </div>
+      <div class="user-item">
         <span>性别</span>
         <el-select v-model="user_sex" placeholder="请选择">
           <el-option
@@ -77,6 +103,8 @@ export default {
       user_birthday: '',
       user_email: '',
       user_avatar_imgUrl: '',
+      user_qq: '',
+      user_wechat: '',
       user_avatar: null,
       file: null,
       image: '',
@@ -101,6 +129,8 @@ export default {
     this.user_phone = JSON.parse(this.user.user).telephone || ''
     this.user_birthday = JSON.parse(this.user.user).birthday || ''
     this.user_email = JSON.parse(this.user.user).email || ''
+    this.user_qq = JSON.parse(this.user.user).qq || ''
+    this.user_wechat = JSON.parse(this.user.user).wechat || ''
     this.image = this.user.img || ''
   },
   computed: {
@@ -113,7 +143,6 @@ export default {
       var reader = new FileReader()
       reader.readAsDataURL(file.raw)
       reader.onload = () => {
-        console.log('file 转 base64结果：' + reader.result)
         this.user_avatar = reader.result
       }
       reader.onerror = function (error) {
@@ -125,15 +154,25 @@ export default {
       const that = this
       that.upload.append('nick_name', this.user_nickname)
       that.upload.append('sex', this.user_sex)
+      that.upload.append('qq', that.user_qq)
+      that.upload.append('wechat', that.user_wechat)
       if (this.user_birthday !== '') {
         console.log(this.user_birthday)
         that.upload.append('birthday', this.user_birthday)
       }
+      that.upload.get('avatar')
       that.$axios.post('/root'+'/user/update', that.upload).then(function (res) {
         if (res.status === 200) {
-          that.image = that.user_avatar
-          that.$store.commit('SET_IMG', that.image)
+          if (that.upload.get('avatar')!==null){
+            that.image = that.user_avatar
+          }
+          that.$store.commit('SET_USERIMG', that.image)
           that.upload = new FormData
+          that.$axios.get('/root'+'/user/basic').then(function (res) {
+            if (res.status === 200) {
+              that.$store.commit('SET_USER', JSON.stringify(res.data))
+            }
+          })
         }
       })
     }

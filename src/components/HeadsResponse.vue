@@ -18,10 +18,11 @@ export default {
     }
   },
   created(){
-    this.otherName='test'
-    this.otherImgName='O1CN01l4mpgR2NXE951sUmU_!!112149972.jpg'
-    // this.otherName = JSON.parse(this.$store.state.chat.chatter_info).nick_name
-    // this.otherImgName = JSON.parse(this.$store.state.chat.chatter_info).avatar
+    // this.otherName='zrdyyds'
+    // this.otherImgName='O1CN01l4mpgR2NXE951sUmU_!!112149972.jpg'
+    console.log('chatinfo'+this.$store.state.chat.chatter_info)
+    this.otherName = JSON.parse(this.$store.state.chat.chatter_info).nick_name
+    this.otherImgName = JSON.parse(this.$store.state.chat.chatter_info).avatar
   },
   async mounted() {
     const that=this;

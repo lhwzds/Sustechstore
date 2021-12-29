@@ -6,24 +6,40 @@
         <div class="content">
         <el-form :model="RegisterForm" status-icon :rules="rules" ref="RegisterForm" label-width="170px" size="mini" class="demo-ruleForm">
           <el-form-item label="昵称" prop="nick_name">
-            <el-row :span="21">
-            <el-input v-model="RegisterForm.nick_name" auto-complete="off" sytle="height=30%"></el-input>
-            </el-row>
+            <el-input v-model="RegisterForm.nick_name" auto-complete="off" sytle="height=30%">
+               <i slot="prefix" class="el-input__icon el-icon-s-custom"
+                 style="font-size: 20px"></i>
+            </el-input>
           </el-form-item>
           <el-form-item label="用户名" prop="user_name">
-            <el-input type="username" v-model="RegisterForm.user_name" auto-complete="off" ></el-input>
+            <el-input type="username" v-model="RegisterForm.user_name" auto-complete="off" >
+               <i slot="prefix" class="el-input__icon el-icon-user"
+                 style="font-size: 20px"></i>
+            </el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
-            <el-input type="email" v-model="RegisterForm.email" auto-complete="off"></el-input>
+            <el-input type="email" v-model="RegisterForm.email" auto-complete="off">
+              <i slot="prefix" class="el-input__icon el-icon-message"
+                 style="font-size: 20px"></i>
+            </el-input>
           </el-form-item>
           <el-form-item label="电话" prop="phone">
-            <el-input type="phone" v-model="RegisterForm.phone" auto-complete="off"></el-input>
+            <el-input type="phone" v-model="RegisterForm.phone" auto-complete="off">
+              <i slot="prefix" class="el-input__icon el-icon-phone"
+                 style="font-size: 20px"></i>
+            </el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input type="pass" v-model="RegisterForm.password"></el-input>
+            <el-input type="pass" v-model="RegisterForm.password">
+              <i slot="prefix" class="el-input__icon el-icon-edit"
+                 style="font-size: 20px"></i>
+            </el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="checkPass">
-            <el-input type="checkpass" v-model="RegisterForm.checkPass"></el-input>
+            <el-input type="checkpass" v-model="RegisterForm.checkPass">
+              <i slot="prefix" class="el-input__icon el-icon-edit"
+                 style="font-size: 20px"></i>
+            </el-input>
           </el-form-item>
           <el-form-item>
             <el-button  type="primary" size = 'medium' @click="submitForm('RegisterForm')">注册</el-button>
@@ -138,11 +154,12 @@ export default {
             telephone: this.RegisterForm.phone
           }).then(function (resp) {
             if (resp.status === 200) { // resp.data表示返回的数据
-              that.$router.push('/')
+            // this.$message.success('注册成功')
+              that.$router.push('/login')
             }
           }).catch(function (error) {
             if (error.response) {
-              that.$message.error('用户名重复')
+              this.$message.error('用户名重复')
             }
           })
         } else {
@@ -166,14 +183,14 @@ export default {
   display:flex;
   position:absolute;
   width:800px;
-  height:400px;
+  height:500px;
   top:45%;
   left:50%;
   transform:translate(-50%,-50%);
   box-shadow: 0 12px 16px 0  rgba(0,0,0,0.24), 0 17px 50px 0 #4E655D;
 }
 .loginbox-in{
-  background-image: url('./../assets/b.jpg');
+  background:rgb(247, 187, 123);
   width:800px;
 }
 .content{

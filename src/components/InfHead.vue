@@ -4,7 +4,10 @@
       <el-col :span="3">
         <el-button icon="el-icon-s-home" @click="go_home()" class="header-button" id="header-button-1">首页</el-button>
       </el-col>
-      <el-col :span="3" :offset="11">
+      <el-col :span="2" :offset="10">
+        <el-button icon="el-icon-s-finance" @click="money()" class="header-button" id="header-button-2"></el-button>
+      </el-col>
+      <el-col :span="2">
         <el-button @click="logout()" class="header-button" id="header-button-2">退出登录</el-button>
       </el-col>
     </el-row>
@@ -17,6 +20,10 @@ export default {
   methods: {
     go_home () {
       this.$router.push('/')
+       this.$store.commit('SET_SLO_IND', 0)
+    },
+    money () {
+      this.$router.push('/center/money')
     },
     logout () {
       this.$confirm('您确定退出登录吗?', '提示', {

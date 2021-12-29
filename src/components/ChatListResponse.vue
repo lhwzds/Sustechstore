@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <section class="chatlist" :class="showSelBox>0?'chatlist-bottom-collapse':'chatlist-bottom'">
             <ul>
                 <div v-for="item in records" :key="item.id">
@@ -19,6 +20,7 @@
 
         <section class="foot">
             <!-- <mt-field id="txtContent" placeholder="请输入消息" class="con" v-model="content"></mt-field> -->
+
             <el-col :span="23" >
                 <el-input class="txtContent" v-model="content" placeholder="请输入消息" ></el-input>
             </el-col>
@@ -89,12 +91,12 @@ export default {
         this.mineName=JSON.parse(that.$store.state.user.user).nick_name;
         this.mineID=JSON.parse(that.$store.state.user.user).id;
         this.mineToken=that.$store.state.user.token;
-        // this.otherImgName = that.$store.state.chat.chat_info.avatar
-        // this.otherName = that.$store.state.chat.chat_info.nick_name
-        // this.otherID = that.$store.state.chat.chat_info.id
-        this.otherName='test'
-        this.otherImgName='O1CN01l4mpgR2NXE951sUmU_!!112149972.jpg'
-        this.otherID='7'
+        this.otherImgName = JSON.parse(that.$store.state.chat.chatter_info).avatar
+        this.otherName = JSON.parse(that.$store.state.chat.chatter_info).nick_name
+        this.otherID = JSON.parse(that.$store.state.chat.chatter_info).id
+        // this.otherName='test'
+        // this.otherImgName='O1CN01l4mpgR2NXE951sUmU_!!112149972.jpg'
+        // this.otherID='7'
         console.log('mineId is '+this.mineID);
         console.log('mineName is '+this.mineName);
         console.log('otherId is '+this.otherID);
