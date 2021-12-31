@@ -1,4 +1,9 @@
 # sustech-store
+```
+这是一个基于VUE和Springboot的课程项目
+This is a course project based on VUE and Springboot
+
+```
 
 ## Project setup
 ```
