@@ -1,6 +1,6 @@
 # sustech-store
 
-[Github stars](https://img.shields.io/github/stars/lhwzds/Sustechstore.svg)
+![](https://img.shields.io/github/stars/lhwzds/Sustechstore.svg)
 
   这是一个基于VUE和Springboot的课程项目
 
