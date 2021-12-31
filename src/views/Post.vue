@@ -194,9 +194,11 @@ import axios from 'axios'
                     }
                     else if(this.radio_type == '2'){
                         fileList.append('merchandiseName', '跑腿: '+this.form.name)
+                        fileList.append('merchandiseTags', ' ')
                     }
                     else{
                         fileList.append('merchandiseName', '求购: '+this.form.name)
+                        fileList.append('merchandiseTags', ' ')
                     }
                     axios({
                         url:"/root"+"/items/add",

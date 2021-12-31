@@ -23,7 +23,7 @@
                 <el-input class="txtContent" v-model="content" placeholder="请输入消息" ></el-input>
             </el-col>
             <el-col :span="1" :offset="8">
-                <span class="btn btn-send" v-on:click="sendMsg">发送</span>
+                <span class="btn btn-send" v-on:click="sendMsg" style="cursor:pointer;">发送</span>
             </el-col>
             
             <!-- <span class="btn-face" v-on:click="showSelBox=showSelBox==1?0:1"><i class="fa fa-smile-o" aria-hidden="true"></i></span> -->        
@@ -349,7 +349,7 @@ export default {
     .chat-mine .chat-text {
         margin-left: 0;
         text-align: left;
-        background-color: #33DF83;
+        background-color: #FF5809;
         color: #fff;
     }
 
@@ -405,7 +405,7 @@ export default {
     .chat-mine .chat-text:after {
         left: auto;
         right: -10px;
-        border-top-color: #33DF83;
+        border-top-color: #FF5809;
     }
     .chat-other .chat-text:after {
         right: auto;
@@ -494,7 +494,7 @@ export default {
         line-height: 32px;
         margin-left: 5px;
         padding: 0 6px;
-        background-color: #33DF83;
+        background-color: #FF5809;
         color: #fff;
         border-radius: 3px;
     }

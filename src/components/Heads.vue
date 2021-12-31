@@ -1,8 +1,22 @@
 <template>
-  <section class="top">
+  <!-- <section class="top">
     <img class="head" :src="otherImg" />
     <span class="name">{{otherName}}</span>
-  </section>
+  </section> -->
+  <div>
+    <el-row  class="row-header" type="flex" justify="center" >
+     <el-col :span="1" :offset="0">
+        <img class="head" :src="otherImg" />
+      </el-col>
+      <el-col :span="20" :offset="0">
+        <h2 class='header-h2'>{{ otherName }}</h2>
+      </el-col>
+       <el-col :span="1" :offset="0">
+        <el-button type="primary" icon="el-icon-s-home" class="header-button" id="header-button-1" @click="backHome"></el-button>
+      </el-col>
+    </el-row>
+  </div>
+
 </template>
 
 <script>
@@ -14,6 +28,11 @@ export default {
       otherImgName:'',
       otherImg: null,
       vociceOpen:true
+    }
+  },
+  methods: {
+    backHome(){
+      this.$router.push('/')
     }
   },
   created(){
@@ -55,7 +74,13 @@ export default {
     float: left;
     border-radius: 100%;
   }
-  
+   .head {
+    width: 60px;
+    height: 60px;
+    float: left;
+    border-radius: 100%;
+    margin-top: 5px;
+  }
   .top .name {
     width: 500px;
     font-size: 18px;

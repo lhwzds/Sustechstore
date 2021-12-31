@@ -8,7 +8,33 @@
         <h2 class='header-h2'>{{ slogan }}</h2>
       </el-col>
       <el-col :span="3">
-        
+
+        <el-badge :value="readData.length" class="item">
+          <el-popover
+            placement="bottom-start"
+            width="500"
+            trigger="click"
+            >
+            <el-table :data="readData">
+              <el-table-column width="100" property="avatar" label="头像" >
+                  <template   slot-scope="scope">            
+                      <img :src="scope.row.avatar"  min-width="100" height="100"/>
+                  </template>         
+              </el-table-column>
+              <el-table-column width="100" property="name" label="昵称" >
+              </el-table-column>
+              <el-table-column width="200" property="content" label="最新消息" >
+              </el-table-column>
+              <el-table-column width="100" property="id" label="与他联系" >
+                  <template   slot-scope="scope">            
+                    <el-button type="text" size="small" @click="goChattingResponse(scope.row.id)">回复</el-button>
+                  </template>  
+              </el-table-column>
+            </el-table>
+              <!-- <el-button slot="reference" type="primary" class="header-button" id="header-button-3" icon="el-icon-message"></el-button>         -->
+          </el-popover>
+        </el-badge>
+
         <el-popover
           placement="bottom-start"
           width="500"
@@ -32,7 +58,6 @@
           </el-table>
             <el-button slot="reference" type="primary" class="header-button" id="header-button-3" icon="el-icon-message"></el-button>        
         </el-popover>
-
       </el-col>
       <el-col :span="5">
         <el-button type="primary" class="header-button" id="header-button-2" @click="goLog">{{btn_text}}</el-button>

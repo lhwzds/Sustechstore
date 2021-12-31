@@ -1,9 +1,22 @@
 <template>
-  <section class="top">
+  <!-- <section class="top">
     <img class="head" :src="otherImg" />
     <span class="name">{{otherName}}</span>
     <span class="voice"><i class="fa" aria-hidden="true" :class="vociceOpen?'fa-volume-up':'fa-volume-down'" v-on:click="vociceOpen=vociceOpen?false:true"></i></span>
-  </section>
+  </section> -->
+  <div>
+    <el-row  class="row-header" type="flex" justify="center" >
+     <el-col :span="1" :offset="0">
+        <img class="head" :src="otherImg" />
+      </el-col>
+      <el-col :span="20" :offset="0">
+        <h2 class='header-h2'>{{ otherName }}</h2>
+      </el-col>
+       <el-col :span="1" :offset="0">
+        <el-button type="primary" icon="el-icon-s-home" class="header-button" id="header-button-1" @click="backHome"></el-button>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
@@ -15,6 +28,11 @@ export default {
       otherImgName:'',
       otherImg: null,
       vociceOpen:true
+    }
+  },
+  methods: {
+    backHome(){
+      this.$router.push('/')
     }
   },
   created(){
@@ -51,11 +69,12 @@ export default {
     padding: 5px 10px;
   }
   
-  .top .head {
-    width: 50px;
-    height: 50px;
+   .head {
+    width: 60px;
+    height: 60px;
     float: left;
     border-radius: 100%;
+    margin-top: 5px;
   }
   
   .top .name {
@@ -64,10 +83,5 @@ export default {
     margin-left: 10px;
   }
   
-  .top .voice {
-    width: 30px;
-    height: 50px;
-    float: right;
-    text-align: center;
-  }
+
 </style>

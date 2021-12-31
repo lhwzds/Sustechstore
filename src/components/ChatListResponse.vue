@@ -339,7 +339,7 @@ export default {
     .chat-mine .chat-text {
         margin-left: 0;
         text-align: left;
-        background-color: #33DF83;
+        background-color: #FF5809;
         color: #fff;
     }
 
@@ -395,7 +395,7 @@ export default {
     .chat-mine .chat-text:after {
         left: auto;
         right: -10px;
-        border-top-color: #33DF83;
+        border-top-color: #FF5809;
     }
     .chat-other .chat-text:after {
         right: auto;
@@ -484,7 +484,7 @@ export default {
         line-height: 32px;
         margin-left: 5px;
         padding: 0 6px;
-        background-color: #33DF83;
+        background-color: #FF5809;
         color: #fff;
         border-radius: 3px;
     }

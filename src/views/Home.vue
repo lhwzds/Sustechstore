@@ -81,7 +81,7 @@
 
     </el-card>
 
-    <!-- <div class="weather_info" v-if="hasWeather">
+    <div class="weather_info" v-if="hasWeather">
       <h3 class="weather_txt" style="top:100px;">深圳市天气预报</h3>
       <div v-if="weather_day == '明天'">
         <img :src="weather.showapi_res_body.f1.day_weather_pic" alt="天气预报" class="weather_img">
@@ -103,7 +103,7 @@
           <el-radio-button label="后天"></el-radio-button>
           <el-radio-button label="大后天"></el-radio-button>
       </el-radio-group>
-    </div> -->
+    </div>
     
 
     <FootBar></FootBar>
