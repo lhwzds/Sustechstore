@@ -1,0 +1,34 @@
+server:
+  port: 23333
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 1000MB
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://database.sustechstore.com:5432/sustechstore
+    username: postgres
+    password: ooadyjndsb
+  #邮箱消息
+  mail:
+    host: smtp.qq.com
+    username: 1771330667@qq.com
+    password: joxymlyhmjizfaai
+    port: 587
+    default-encoding: UTF-8
+
+    properties:
+      mail:
+        debug: true
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+#mybatis的相关配置
+mybatis-plus:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.sustechstore.dao
+  #开启驼峰命名
+  configuration:
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
