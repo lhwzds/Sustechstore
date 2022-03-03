@@ -6,9 +6,9 @@
 
   This is a course project based on VUE and Springboot
 
-  感谢yjn , [XJC-git](https://github.com/XJC-git) , [raven3199](https://github.com/raven3199) , [xiao xixi](https://github.com/tian-y-x) , [lhwzds](https://github.com/lhwzds)一起合作完成了这个课程项目。
+  感谢[yechen17](https://github.com/yechen17) , [XJC-git](https://github.com/XJC-git) , [raven3199](https://github.com/raven3199) , [xiao xixi](https://github.com/tian-y-x) , [lhwzds](https://github.com/lhwzds)一起合作完成了这个课程项目。
 
-  Thanks to yjn , [XJC-git](https://github.com/XJC-git) , [raven3199](https://github.com/raven3199) , [xiao xixi](https://github.com/tian-y-x) , [ lhwzds](https://github.com/lhwzds) collaborated together on this course project.
+  Thanks to [yechen17](https://github.com/yechen17) , [XJC-git](https://github.com/XJC-git) , [raven3199](https://github.com/raven3199) , [xiao xixi](https://github.com/tian-y-x) , [ lhwzds](https://github.com/lhwzds) collaborated together on this course project.
 
 
 
